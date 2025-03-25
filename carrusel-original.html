@@ -200,6 +200,40 @@ html, body {
   }
 }
 
+#selectedCardsView {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.symbol {
+  width: 80px;
+  height: 80px;
+  background: url('https://media.atomicatpages.net/u/VKdhbutUBLg5pZCmDWr4fJf466f1/Pictures/gdwgon2513836.png') no-repeat center;
+  background-size: contain;
+  filter: brightness(0) saturate(100%) invert(65%) sepia(79%) saturate(400%) hue-rotate(5deg) brightness(95%) contrast(90%);
+  animation: spin 3s linear infinite;
+  margin: 2rem auto;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+#interpretation {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.5);
+  border-left: 4px solid gold;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: #FFD700;
+  white-space: pre-line;
+  font-family: 'Playfair Display', serif;
+}
 
 
   </style>
@@ -329,6 +363,20 @@ html, body {
       "Los fragmentos han sido elegidos por tu alma"
     ];
 
+  const selectedCardsView = document.createElement('div');
+selectedCardsView.id = 'selectedCardsView';
+selectedCardsView.style.display = 'none';
+document.body.insertBefore(selectedCardsView, continueButton.parentElement);
+
+const interpretation = document.createElement('div');
+interpretation.id = 'interpretation';
+document.body.appendChild(interpretation);
+
+const loadingSymbol = document.createElement('div');
+loadingSymbol.className = 'symbol';
+loadingSymbol.style.display = 'none';
+document.body.insertBefore(loadingSymbol, interpretation);
+
     cards.forEach(card => {
       const title = card.querySelector('.card-title');
 
@@ -365,27 +413,27 @@ html, body {
       });
     });
 
-  continueButton.addEventListener('click', async () => {
-  // Ocultar todos los carruseles
+continueButton.addEventListener('click', async () => {
+  // Oculta carruseles y títulos
   document.querySelectorAll('.carousel-container').forEach(c => c.style.display = 'none');
+  document.querySelectorAll('h2').forEach(h2 => h2.style.display = 'none');
 
-  // Ocultar los títulos de sección
-  document.querySelectorAll('h2').forEach(h2 => {
-    h2.style.display = 'none';
-  });
+  // Oculta el botón
+  continueButton.style.display = 'none';
 
-  // Mostrar solo las cartas seleccionadas
+  // Prepara carrusel centrado con 4 cartas
   selectedCardsView.innerHTML = '';
   selectedCardsView.style.display = 'flex';
+
   const orderedCards = [...selectedCards];
   orderedCards.forEach(card => {
-    // Ocultar el nombre de cada carta seleccionada
     const title = card.querySelector('.card-title');
     if (title) title.style.display = 'none';
     selectedCardsView.appendChild(card);
   });
 
   interpretation.innerText = 'Los símbolos han sido revelados... conectando con la Fuente...';
+  loadingSymbol.style.display = 'block';
 
   const ids = orderedCards.map(c => parseInt(c.getAttribute('data-id')));
   const payload = {
@@ -399,9 +447,12 @@ html, body {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
+
     const result = await response.json();
+    loadingSymbol.style.display = 'none';
     interpretation.innerText = result.prediction || 'Algo fue revelado, pero no logramos comprenderlo...';
   } catch (err) {
+    loadingSymbol.style.display = 'none';
     interpretation.innerText = 'El portal se cerró antes de tiempo... intenta de nuevo más tarde.';
   }
 });
