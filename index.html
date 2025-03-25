@@ -169,7 +169,7 @@ continueButton.addEventListener('click', async () => {
   };
 
   try {
-    const response = await fetch('https://codex-hermetico-predict.vercel.app/api/predict', {
+    const response = await fetch('https://codex-hermetico.vercel.app/api/predict', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
