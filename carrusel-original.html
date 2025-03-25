@@ -22,9 +22,6 @@
       font-family: 'Cinzel Decorative', cursive;
     }
 
-
-
-
     .carousel-container {
       display: flex;
       flex-wrap: nowrap;
@@ -105,8 +102,6 @@
   text-align: center;
   margin-top: 2rem;
 }
-
-
 
 
 }
@@ -370,33 +365,48 @@ html, body {
       });
     });
 
-    continueButton.addEventListener('click', async () => {
-      document.querySelectorAll('.carousel-container').forEach(c => c.style.display = 'none');
-      selectedCardsView.innerHTML = '';
-      selectedCardsView.style.display = 'flex';
-      const orderedCards = [...selectedCards];
-      orderedCards.forEach(card => selectedCardsView.appendChild(card));
-      interpretation.innerText = 'Los símbolos han sido revelados... conectando con la Fuente...';
+  continueButton.addEventListener('click', async () => {
+  // Ocultar todos los carruseles
+  document.querySelectorAll('.carousel-container').forEach(c => c.style.display = 'none');
 
-      const ids = orderedCards.map(c => parseInt(c.getAttribute('data-id')));
-      const payload = {
-        selectedCards: ids,
-        positions: ["Umbral", "Voz", "Desafío", "Sendero"]
-      };
+  // Ocultar los títulos de sección
+  document.querySelectorAll('h2').forEach(h2 => {
+    h2.style.display = 'none';
+  });
 
-      try {
-        
-        const response = await fetch('https://codex-hermetico.vercel.app/api/predict', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const result = await response.json();
-        interpretation.innerText = result.prediction || 'Algo fue revelado, pero no logramos comprenderlo...';
-      } catch (err) {
-        interpretation.innerText = 'El portal se cerró antes de tiempo... intenta de nuevo más tarde.';
-      }
+  // Mostrar solo las cartas seleccionadas
+  selectedCardsView.innerHTML = '';
+  selectedCardsView.style.display = 'flex';
+  const orderedCards = [...selectedCards];
+  orderedCards.forEach(card => {
+    // Ocultar el nombre de cada carta seleccionada
+    const title = card.querySelector('.card-title');
+    if (title) title.style.display = 'none';
+    selectedCardsView.appendChild(card);
+  });
+
+  interpretation.innerText = 'Los símbolos han sido revelados... conectando con la Fuente...';
+
+  const ids = orderedCards.map(c => parseInt(c.getAttribute('data-id')));
+  const payload = {
+    selectedCards: ids,
+    positions: ["Umbral", "Voz", "Desafío", "Sendero"]
+  };
+
+  try {
+    const response = await fetch('https://codex-hermetico.vercel.app/api/predict', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
     });
+    const result = await response.json();
+    interpretation.innerText = result.prediction || 'Algo fue revelado, pero no logramos comprenderlo...';
+  } catch (err) {
+    interpretation.innerText = 'El portal se cerró antes de tiempo... intenta de nuevo más tarde.';
+  }
+});
+
+ 
   </script>
 
   
