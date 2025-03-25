@@ -341,113 +341,122 @@ html, body {
 </div>
 
 <script>
-  const cards = document.querySelectorAll('.card');
-  const continueButton = document.getElementById('continueButton');
-  const magicMessage = document.getElementById('magicMessage');
-  const selectedCards = new Set();
+  window.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.card');
+    const continueButton = document.getElementById('continueButton');
+    const magicMessage = document.getElementById('magicMessage');
+    const selectedCards = new Set();
 
-  const selectedCardsView = document.createElement('div');
-  selectedCardsView.className = 'carousel-container';
-  selectedCardsView.id = 'selectedCardsView';
-  selectedCardsView.style.display = 'none';
-  selectedCardsView.style.justifyContent = 'center';
-  document.body.insertBefore(selectedCardsView, continueButton.parentElement);
+    // Contenedor para mostrar las 4 cartas seleccionadas
+    const selectedCardsView = document.createElement('div');
+    selectedCardsView.className = 'carousel-container';
+    selectedCardsView.id = 'selectedCardsView';
+    selectedCardsView.style.display = 'none';
+    selectedCardsView.style.justifyContent = 'center';
+    document.body.appendChild(selectedCardsView); // ✅ Seguro
 
-  const interpretation = document.createElement('div');
-  interpretation.id = 'interpretation';
-  document.body.appendChild(interpretation);
+    // Contenedor para la interpretación
+    const interpretation = document.createElement('div');
+    interpretation.id = 'interpretation';
+    document.body.appendChild(interpretation);
 
-  const loadingSymbol = document.createElement('div');
-  loadingSymbol.className = 'symbol';
-  loadingSymbol.style.display = 'none';
-  document.body.insertBefore(loadingSymbol, interpretation);
+    // Ícono animado
+    const loadingSymbol = document.createElement('div');
+    loadingSymbol.className = 'symbol';
+    loadingSymbol.style.display = 'none';
+    document.body.insertBefore(loadingSymbol, interpretation);
 
-  const messages = [
-    "Tu energía ha convocado símbolos ancestrales",
-    "El Codex ha respondido a tu vibración",
-    "Un portal interior acaba de abrirse",
-    "El círculo está completo, presiona continuar",
-    "Los fragmentos han sido elegidos por tu alma"
-  ];
+    const messages = [
+      "Tu energía ha convocado símbolos ancestrales",
+      "El Codex ha respondido a tu vibración",
+      "Un portal interior acaba de abrirse",
+      "El círculo está completo, presiona continuar",
+      "Los fragmentos han sido elegidos por tu alma"
+    ];
 
-  cards.forEach(card => {
-    const title = card.querySelector('.card-title');
-
-    card.addEventListener('click', () => {
-      const isSelected = card.classList.contains('selected');
-      if (!isSelected && selectedCards.size >= 4) return;
-
-      card.classList.toggle('selected');
-      if (!isSelected) {
-        selectedCards.add(card);
-        if (title) title.style.opacity = '1';
-      } else {
-        selectedCards.delete(card);
-        if (title) title.style.opacity = '0';
-      }
-
-      const isFourSelected = selectedCards.size === 4;
-      continueButton.classList.toggle('active', isFourSelected);
-
-      if (isFourSelected) {
-        const msg = messages[Math.floor(Math.random() * messages.length)];
-        magicMessage.innerHTML = `
-          <p>${msg}</p>
-          <button onclick="document.getElementById('continueButton').scrollIntoView({ behavior: 'smooth' });" style="margin-top: 1rem; padding: 8px 16px; font-size: 1rem; background-color: gold; color: black; border: none; border-radius: 5px; cursor: pointer;">Revelar</button>
-        `;
-        magicMessage.style.display = 'block';
-        const last = [...selectedCards][3];
-        last.classList.add('glow-temp');
-        setTimeout(() => {
-          magicMessage.style.display = 'none';
-          last.classList.remove('glow-temp');
-        }, 3000);
-      }
-    });
-  });
-
-  continueButton.addEventListener('click', async () => {
-    // Oculta carruseles, títulos y botón
-    document.querySelectorAll('.carousel-container').forEach(c => c.style.display = 'none');
-    document.querySelectorAll('h2').forEach(h2 => h2.style.display = 'none');
-    continueButton.style.display = 'none';
-
-    // Muestra las 4 cartas seleccionadas centradas
-    selectedCardsView.innerHTML = '';
-    selectedCardsView.style.display = 'flex';
-
-    const orderedCards = [...selectedCards];
-    orderedCards.forEach(card => {
+    cards.forEach(card => {
       const title = card.querySelector('.card-title');
-      if (title) title.style.display = 'none';
-      selectedCardsView.appendChild(card);
+
+      card.addEventListener('click', () => {
+        const isSelected = card.classList.contains('selected');
+        if (!isSelected && selectedCards.size >= 4) return;
+
+        card.classList.toggle('selected');
+        if (!isSelected) {
+          selectedCards.add(card);
+          if (title) title.style.opacity = '1';
+        } else {
+          selectedCards.delete(card);
+          if (title) title.style.opacity = '0';
+        }
+
+        const isFourSelected = selectedCards.size === 4;
+        continueButton.classList.toggle('active', isFourSelected);
+
+        if (isFourSelected) {
+          const msg = messages[Math.floor(Math.random() * messages.length)];
+          magicMessage.innerHTML = `
+            <p>${msg}</p>
+            <button onclick="document.getElementById('continueButton').scrollIntoView({ behavior: 'smooth' });" style="margin-top: 1rem; padding: 8px 16px; font-size: 1rem; background-color: gold; color: black; border: none; border-radius: 5px; cursor: pointer;">Revelar</button>
+          `;
+          magicMessage.style.display = 'block';
+          const last = [...selectedCards][3];
+          last.classList.add('glow-temp');
+          setTimeout(() => {
+            magicMessage.style.display = 'none';
+            last.classList.remove('glow-temp');
+          }, 3000);
+        }
+      });
     });
 
-    interpretation.innerText = 'Los símbolos han sido revelados... conectando con la Fuente...';
-    loadingSymbol.style.display = 'block';
+    continueButton.addEventListener('click', async () => {
+      // Oculta carruseles y títulos
+      document.querySelectorAll('.carousel-container').forEach(c => c.style.display = 'none');
+      document.querySelectorAll('h2').forEach(h => h.style.display = 'none');
 
-    const ids = orderedCards.map(c => parseInt(c.getAttribute('data-id')));
-    const payload = {
-      selectedCards: ids,
-      positions: ["Umbral", "Voz", "Desafío", "Sendero"]
-    };
+      // Oculta botón
+      continueButton.style.display = 'none';
 
-    try {
-      const response = await fetch('https://codex-hermetico.vercel.app/api/predict', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+      // Muestra las cartas seleccionadas
+      selectedCardsView.innerHTML = '';
+      selectedCardsView.style.display = 'flex';
+      const orderedCards = [...selectedCards];
+
+      orderedCards.forEach(card => {
+        const title = card.querySelector('.card-title');
+        if (title) title.style.display = 'none'; // oculta los títulos
+        selectedCardsView.appendChild(card);
       });
 
-      const result = await response.json();
-      loadingSymbol.style.display = 'none';
-      interpretation.innerText = result.prediction || 'Algo fue revelado, pero no logramos comprenderlo...';
-    } catch (err) {
-      loadingSymbol.style.display = 'none';
-      interpretation.innerText = 'El portal se cerró antes de tiempo... intenta de nuevo más tarde.';
-    }
+      // Muestra mensaje y símbolo de carga
+      interpretation.innerText = 'Los símbolos han sido revelados... conectando con la Fuente...';
+      loadingSymbol.style.display = 'block';
+
+      const ids = orderedCards.map(c => parseInt(c.getAttribute('data-id')));
+      const payload = {
+        selectedCards: ids,
+        positions: ["Umbral", "Voz", "Desafío", "Sendero"]
+      };
+
+      try {
+        const response = await fetch('https://codex-hermetico.vercel.app/api/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+        loadingSymbol.style.display = 'none';
+        interpretation.innerText = result.prediction || 'Algo fue revelado, pero no logramos comprenderlo...';
+      } catch (err) {
+        loadingSymbol.style.display = 'none';
+        interpretation.innerText = 'El portal se cerró antes de tiempo... intenta de nuevo más tarde.';
+      }
+    });
   });
 </script>
+
 
 
   
