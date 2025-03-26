@@ -515,11 +515,11 @@ html, body {
             const interpretationText = document.createElement('div');
             interpretationText.className = 'interpretation-text';
 
-const elementSymbols = ['🜃', '🜁', '🜂', '🜄'];
+
 interpretationText.innerHTML = `
-  <div class="alchemical-symbol">${elementSymbols[i]}</div>
   <h3>${labels[i]}</h3>
   <p>${sections[i].trim()}</p>`;
+
 
             cardBlock.appendChild(clonedCard);
             cardBlock.appendChild(interpretationText);
