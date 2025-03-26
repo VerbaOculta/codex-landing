@@ -600,8 +600,9 @@ body.mystic-glow {
             cardBlock.className = 'card-interpretation-block vertical';
 
             const clonedCard = card.cloneNode(true);
-            clonedCard.classList.remove('glow-temp');
+            clonedCard.removeAttribute('class');
             clonedCard.classList.add('static-card');
+            
 
             const interpretationText = document.createElement('div');
             interpretationText.className = 'interpretation-text';
