@@ -7,258 +7,278 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
 
  <style>
-  body {
-    margin: 0;
-    padding: 2rem;
-    background: linear-gradient(to bottom, #0D0D0D, #1A1A2E);
-    color: #fff;
-    font-family: 'Playfair Display', serif;
-  }
 
-  h2 {
-    font-size: 1.5rem;
-    color: #FFD700;
-    margin: 2rem 0 1rem;
-    text-align: center;
-    font-family: 'Cinzel Decorative', cursive;
-  }
+body {
+  margin: 0;
+  padding: 2rem;
+  background: linear-gradient(to bottom, #0D0D0D, #1A1A2E);
+  color: #fff;
+  font-family: 'Playfair Display', serif;
+}
 
-  .carousel-container {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 1rem;
-    padding: 1rem 0;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    justify-content: center;
-    overflow-x: auto;
-    max-width: 100%;
-    margin: 0 auto;
-  }
+h2 {
+  font-size: 1.5rem;
+  color: #FFD700;
+  margin: 2rem 0 1rem;
+  text-align: center;
+  font-family: 'Cinzel Decorative', cursive;
+}
 
+.carousel-container {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  padding: 1rem 0;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  justify-content: center;
+  overflow-x: auto;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.card {
+  flex: 0 0 auto;
+  width: 80px;
+  scroll-snap-align: center;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.3s;
+}
+
+.card img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover img {
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+  transform: scale(1.05);
+}
+
+.card.selected img {
+  box-shadow: 0 0 20px rgba(255, 215, 0, 1);
+  transform: scale(1.1);
+}
+
+.card-title {
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.75rem;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 4px;
+  border-radius: 0 0 10px 10px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.card:hover .card-title {
+  opacity: 1;
+}
+
+@media (max-width: 600px) {
   .card {
-    flex: 0 0 auto;
-    width: 80px;
-    scroll-snap-align: center;
-    cursor: pointer;
-    position: relative;
-    transition: transform 0.3s;
-  }
-
-  .card img {
-    width: 100%;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
-  }
-
-  .card:hover img {
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
-    transform: scale(1.05);
-  }
-
-  .card.selected img {
-    box-shadow: 0 0 20px rgba(255, 215, 0, 1);
-    transform: scale(1.1);
+    width: 65px;
   }
 
   .card-title {
-    position: absolute;
-    bottom: 8px;
-    left: 0;
-    right: 0;
-    text-align: center;
-    font-size: 0.75rem;
-    background: rgba(0,0,0,0.6);
-    padding: 4px;
-    border-radius: 0 0 10px 10px;
-    opacity: 0;
-    transition: opacity 0.3s;
+    font-size: 0.6rem;
   }
 
-  .card:hover .card-title {
-    opacity: 1;
-  }
-
-  @media (max-width: 600px) {
-    .card { width: 65px; }
-    .card-title { font-size: 0.6rem; }
-    h2 {
-      font-size: 1rem;
-      margin: 1rem 0 0.0rem;
-    }
-    .button-container {
-      text-align: center;
-      margin-top: 2rem;
-    }
-  }
-
-  html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  body.mystic-glow {
-    animation: glowFade 1.5s ease-in-out;
-  }
-
-  @keyframes glowFade {
-    0% { box-shadow: inset 0 0 100px rgba(255, 215, 0, 0.2); background-color: #1f1a2e; }
-    50% { box-shadow: inset 0 0 200px rgba(255, 215, 0, 0.4); background-color: #292042; }
-    100% { box-shadow: inset 0 0 100px rgba(255, 215, 0, 0.2); background-color: #1a1a2e; }
-  }
-
-  @keyframes glowPulse {
-    0% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
-    50% { box-shadow: 0 0 40px rgba(255, 215, 0, 1); }
-    100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
-  }
-
-  @keyframes fadeInOut {
-    0% { opacity: 0; }
-    20% { opacity: 1; }
-    80% { opacity: 1; }
-    100% { opacity: 0; }
-  }
-
-  .glow-temp img {
-    animation: glowPulse 2s ease-in-out infinite;
-  }
-
-  .btn-continue {
-    display: none;
-    background: radial-gradient(circle at center, #FFD700 0%, #b38600 100%);
-    color: #1A1A2E;
-    border: 1px solid #FFD700;
-    padding: 10px 24px;
+  h2 {
     font-size: 1rem;
-    font-family: 'Cinzel Decorative', cursive;
-    letter-spacing: 1px;
-    cursor: pointer;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
-    transition: all 0.4s ease;
-    text-transform: uppercase;
-  }
-
-  .btn-continue:hover {
-    background: #FFD700;
-    color: #000;
-    box-shadow: 0 0 25px rgba(255, 215, 0, 0.7);
+    margin: 1rem 0 0rem;
   }
 
   .button-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 2rem;
-    width: 100%;
-  }
-
-  .btn-continue.active {
-    display: inline-block;
-  }
-
-  #selectedCardsView {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
+    text-align: center;
     margin-top: 2rem;
   }
+}
 
-  .symbol {
-    width: 80px;
-    height: 80px;
-    background: url('https://media.atomicatpages.net/u/VKdhbutUBLg5pZCmDWr4fJf466f1/Pictures/gdwgon2513836.png') no-repeat center;
-    background-size: contain;
-    filter: brightness(0) saturate(100%) invert(65%) sepia(79%) saturate(400%) hue-rotate(5deg) brightness(95%) contrast(90%);
-    animation: spin 3s linear infinite;
-    margin: 2rem auto;
-  }
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  .symbol-loading {
-    width: 80px;
-    height: 80px;
-    margin: 2rem auto;
-    border: 4px solid rgba(255, 215, 0, 0.2);
-    border-top: 4px solid gold;
-    border-radius: 50%;
-    animation: spin 1.2s linear infinite;
-  }
+body.mystic-glow {
+  animation: glowFade 1.5s ease-in-out;
+}
 
-  @keyframes spin {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
+@keyframes glowFade {
+  0% {
+    box-shadow: inset 0 0 100px rgba(255, 215, 0, 0.2);
+    background-color: #1f1a2e;
   }
+  50% {
+    box-shadow: inset 0 0 200px rgba(255, 215, 0, 0.4);
+    background-color: #292042;
+  }
+  100% {
+    box-shadow: inset 0 0 100px rgba(255, 215, 0, 0.2);
+    background-color: #1a1a2e;
+  }
+}
 
-  #interpretation {
-    max-width: 700px;
-    margin: 2rem auto;
-    padding: 1.5rem 1.5rem;
-    background: rgba(0, 0, 0, 0.4);
-    font-style: italic;
-    font-size: 1.1rem;
-    color: #FFD700;
-    white-space: pre-line;
-    font-family: 'Playfair Display', serif;
-    border-left: none !important;
-  }
+@keyframes glowPulse {
+  0% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+  50% { box-shadow: 0 0 40px rgba(255, 215, 0, 1); }
+  100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+}
 
-  .hidden {
-    display: none !important;
-    height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-  }
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
 
-  .card-interpretation-block {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    opacity: 0;
-    transform: translateY(-40px);
-    transition: all 0.8s ease;
-  }
+.glow-temp img {
+  animation: glowPulse 2s ease-in-out infinite;
+}
 
-  .card-interpretation-block.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  width: 100%;
+}
 
-  .card-interpretation-block .static-card {
-    width: 100px;
-    flex-shrink: 0;
-  }
+.btn-continue {
+  display: none;
+  background: radial-gradient(circle at center, #FFD700 0%, #b38600 100%);
+  color: #1A1A2E;
+  border: 1px solid #FFD700;
+  padding: 10px 24px;
+  font-size: 1rem;
+  font-family: 'Cinzel Decorative', cursive;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+  transition: all 0.4s ease;
+  text-transform: uppercase;
+}
 
-  .interpretation-text {
-    flex: 1;
-    background: rgba(255, 255, 255, 0.05);
-    border-left: 2px solid gold;
-    padding: 1rem;
-    border-radius: 8px;
-    color: #FFD700;
-    font-family: 'Playfair Display', serif;
-  }
+.btn-continue:hover {
+  background: #FFD700;
+  color: #000;
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.7);
+}
 
-  .interpretation-text h3 {
-    margin: 0 0 0.5rem;
-    font-size: 1.2rem;
-    font-family: 'Cinzel Decorative', cursive;
-    color: gold;
-  }
+.btn-continue.active {
+  display: inline-block;
+}
 
-  .interpretation-text p {
-    margin: 0;
-    line-height: 1.5;
-  }
+#selectedCardsView {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
 
-  #interpretacion-anchor {
-    display: contents;
-  }
+.symbol {
+  width: 80px;
+  height: 80px;
+  background: url('https://media.atomicatpages.net/u/VKdhbutUBLg5pZCmDWr4fJf466f1/Pictures/gdwgon2513836.png') no-repeat center;
+  background-size: contain;
+  filter: brightness(0) saturate(100%) invert(65%) sepia(79%) saturate(400%) hue-rotate(5deg) brightness(95%) contrast(90%);
+  animation: spin 3s linear infinite;
+  margin: 2rem auto;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+#interpretation {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 1.5rem 1.5rem;
+  background: rgba(0, 0, 0, 0.4);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: #FFD700;
+  white-space: pre-line;
+  font-family: 'Playfair Display', serif;
+  border-left: none;
+}
+
+/* Ocultamiento controlado por clase */
+.hidden {
+  display: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.card-interpretation-block {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  opacity: 0;
+  transform: translateY(-40px);
+  transition: all 0.8s ease;
+}
+
+.card-interpretation-block.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card-interpretation-block .static-card {
+  width: 100px;
+  flex-shrink: 0;
+}
+
+.interpretation-text {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 2px solid gold;
+  padding: 1rem;
+  border-radius: 8px;
+  color: #FFD700;
+  font-family: 'Playfair Display', serif;
+}
+
+.interpretation-text h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.2rem;
+  font-family: 'Cinzel Decorative', cursive;
+  color: gold;
+}
+
+.interpretation-text p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+#interpretacion-anchor {
+  display: contents;
+}
+
+.symbol-loading {
+  width: 80px;
+  height: 80px;
+  margin: 2rem auto;
+  border: 4px solid rgba(255, 215, 0, 0.2);
+  border-top: 4px solid gold;
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+}
+
+   
 </style>
 
 
@@ -341,6 +361,7 @@
   </div>
 
     <section id="interpretacion-anchor" style="margin: 0; padding: 0;"></section>
+    <div id="interpretation" class="hidden"></div>
 
 
 <div class="button-container">
@@ -368,7 +389,8 @@
 ">
   La Obra está en marcha... el Codex comienza a revelar... 
 </div>
-<script>
+
+  <script>
   window.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.card');
     const continueButton = document.getElementById('continueButton');
@@ -376,22 +398,20 @@
     const selectedCards = new Set();
 
     const selectedCardsView = document.createElement('div');
-    selectedCardsView.className = 'carousel-container';
+    selectedCardsView.className = 'carousel-container hidden';
     selectedCardsView.id = 'selectedCardsView';
-    selectedCardsView.style.display = 'none';
     selectedCardsView.style.justifyContent = 'center';
     document.body.appendChild(selectedCardsView);
 
     const interpretation = document.createElement('div');
     interpretation.id = 'interpretation';
+    interpretation.classList.add('hidden');
 
     const anchor = document.getElementById('interpretacion-anchor');
     if (anchor) anchor.appendChild(interpretation);
 
     const loadingSymbol = document.createElement('div');
-    loadingSymbol.className = 'symbol-loading';
-    loadingSymbol.style.display = 'none';
-
+    loadingSymbol.className = 'symbol-loading hidden';
     if (anchor) anchor.insertBefore(loadingSymbol, interpretation);
 
     const messages = [
@@ -439,15 +459,12 @@
     });
 
     continueButton.addEventListener('click', async () => {
-      // Ocultar carruseles y títulos
-      document.querySelectorAll('.carousel-container').forEach(c => c.style.display = 'none');
+      document.querySelectorAll('.carousel-container').forEach(c => c.classList.add('hidden'));
       document.querySelectorAll('h2').forEach(h => h.style.display = 'none');
       continueButton.style.display = 'none';
 
-      // Mostrar las 4 cartas seleccionadas
       selectedCardsView.innerHTML = '';
-      selectedCardsView.style.display = 'flex';
-      selectedCardsView.style.opacity = '1';
+      selectedCardsView.classList.remove('hidden');
       const orderedCards = [...selectedCards];
 
       orderedCards.forEach(card => {
@@ -456,19 +473,9 @@
         selectedCardsView.appendChild(card);
       });
 
-      // Ocultarlas luego de un tiempo
-      setTimeout(() => {
-        selectedCardsView.style.transition = 'opacity 1.2s ease';
-        selectedCardsView.style.opacity = '0';
-        setTimeout(() => {
-          selectedCardsView.innerHTML = '';
-          selectedCardsView.style.display = 'none';
-        }, 1200);
-      }, 500);
-
-      // Mostrar mensaje de carga
+      interpretation.classList.remove('hidden');
       interpretation.innerText = 'Los símbolos han sido revelados... conectando con la Fuente...';
-      loadingSymbol.style.display = 'block';
+      loadingSymbol.classList.remove('hidden');
 
       const ids = orderedCards.map(c => parseInt(c.getAttribute('data-id')));
       const payload = {
@@ -484,13 +491,12 @@
         });
 
         const result = await response.json();
-        loadingSymbol.style.display = 'none';
-        interpretation.innerText = '';
-        interpretation.style.display = 'block';
-
         const raw = result.prediction || '';
         const sections = raw.split(/Umbral:|Voz:|Desafío:|Sendero:/).slice(1);
         const labels = ['Umbral', 'Voz', 'Desafío', 'Sendero'];
+
+        loadingSymbol.classList.add('hidden');
+        interpretation.innerHTML = '';
 
         if (sections.length === 4) {
           orderedCards.forEach((card, i) => {
@@ -536,12 +542,13 @@
         }
 
       } catch (err) {
-        loadingSymbol.style.display = 'none';
+        loadingSymbol.classList.add('hidden');
         interpretation.innerText = 'El portal se cerró antes de tiempo... intenta de nuevo más tarde.';
       }
     });
   });
 </script>
+
 
 
 </body>
