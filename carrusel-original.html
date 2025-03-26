@@ -332,9 +332,18 @@ body.mystic-glow {
 }
 
 .card-interpretation-block.vertical .interpretation-text p {
-  line-height: 1.65;
-  font-size: 1.1rem;
+ 
+  text-align: justify;
+  line-height: 1.75;
+  
 }
+
+ @media (max-width: 600px) {
+  .card-interpretation-block.vertical .interpretation-text p {
+    text-align: left;
+    line-height: 1.6;
+  }
+ }   
 
 .card-interpretation-block.vertical .interpretation-text p:first-letter {
   font-size: 2rem;
