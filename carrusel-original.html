@@ -452,7 +452,11 @@ h2 {
 
 <div class="button-container">
   <button class="btn-continue" id="continueButton">✨ Revelar los Fragmentos</button>
+  <button id="retryButton" style="display:none; margin-top: 1.5rem; padding: 10px 20px; font-size: 1rem; background: gold; color: black; border: none; border-radius: 6px; cursor: pointer;">
+  Reintentar interpretación
+</button>
 </div>
+
 
    <section id="interpretacion-anchor" style="margin: 0; padding: 0;"></section>
 
@@ -633,6 +637,15 @@ h2 {
         loadingSymbol.style.display = 'none';
         interpretation.innerText = 'El portal se cerró antes de tiempo... intenta de nuevo más tarde.';
         console.error('[Codex Debug] Error de interpretación:', err);
+
+        const retryBtn = document.getElementById('retryButton');
+        if (retryBtn) {
+          retryBtn.style.display = 'inline-block';
+          retryBtn.onclick = () => {
+          retryBtn.style.display = 'none';
+          continueButton.click(); // vuelve a disparar la lógica
+          };
+        }        
       }
     });
   });
