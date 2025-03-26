@@ -5,349 +5,266 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Codex Hermético - Carrusel</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+
   <style>
-    body {
-      margin: 0;
-      padding: 2rem;
-      background: linear-gradient(to bottom, #0D0D0D, #1A1A2E);
-      color: #fff;
-      font-family: 'Playfair Display', serif;
-    }
+  body {
+    margin: 0;
+    padding: 2rem;
+    background: linear-gradient(to bottom, #0D0D0D, #1A1A2E);
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+  }
 
-    h2 {
-      font-size: 1.5rem;
-      color: #FFD700;
-      margin: 2rem 0 1rem;
-      text-align: center;
-      font-family: 'Cinzel Decorative', cursive;
-    }
+  html, body {
+    height: 100%;
+    box-sizing: border-box;
+  }
 
-    .carousel-container {
-      display: flex;
-      flex-wrap: nowrap;
-      gap: 1rem;
-      padding: 1rem 0;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      justify-content: center;
-      overflow-x: auto;
-      max-width: 100%;
-      margin: 0 auto;
-    }
+  h2 {
+    font-size: 1.5rem;
+    color: #FFD700;
+    margin: 2rem 0 1rem;
+    text-align: center;
+    font-family: 'Cinzel Decorative', cursive;
+  }
 
+  .carousel-container {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    padding: 1rem 0;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    justify-content: center;
+    overflow-x: auto;
+    max-width: 100%;
+    margin: 0 auto;
+  }
 
+  .card {
+    flex: 0 0 auto;
+    width: 80px;
+    scroll-snap-align: center;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.3s;
+  }
+
+  .card img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+
+  .card:hover img {
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+    transform: scale(1.05);
+  }
+
+  .card.selected img {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 1);
+    transform: scale(1.1);
+  }
+
+  .card-title {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.75rem;
+    background: rgba(0,0,0,0.6);
+    padding: 4px;
+    border-radius: 0 0 10px 10px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .card:hover .card-title {
+    opacity: 1;
+  }
+
+  .btn-continue {
+    display: none;
+    background: radial-gradient(circle at center, #FFD700 0%, #b38600 100%);
+    color: #1A1A2E;
+    border: 1px solid #FFD700;
+    padding: 10px 24px;
+    font-size: 1rem;
+    font-family: 'Cinzel Decorative', cursive;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+    transition: all 0.4s ease;
+    text-transform: uppercase;
+  }
+
+  .btn-continue:hover {
+    background: #FFD700;
+    color: #000;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.7);
+  }
+
+  .btn-continue.active {
+    display: inline-block;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    width: 100%;
+  }
+
+  #selectedCardsView {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .symbol {
+    width: 80px;
+    height: 80px;
+    background: url('https://media.atomicatpages.net/u/VKdhbutUBLg5pZCmDWr4fJf466f1/Pictures/gdwgon2513836.png') no-repeat center;
+    background-size: contain;
+    filter: brightness(0) saturate(100%) invert(65%) sepia(79%) saturate(400%) hue-rotate(5deg) brightness(95%) contrast(90%);
+    animation: spin 3s linear infinite;
+    margin: 2rem auto;
+  }
+
+  .symbol-loading {
+    width: 80px;
+    height: 80px;
+    margin: 2rem auto;
+    border: 4px solid rgba(255, 215, 0, 0.2);
+    border-top: 4px solid gold;
+    border-radius: 50%;
+    animation: spin 1.2s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  #interpretation {
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.4);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: #FFD700;
+    white-space: pre-line;
+    font-family: 'Playfair Display', serif;
+    border-left: none !important;
+    display: none;
+    animation: fadeIn 0.8s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-interpretation-block {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: translateY(-40px);
+    transition: all 0.8s ease;
+  }
+
+  .card-interpretation-block.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .card-interpretation-block .static-card {
+    width: 100px;
+    flex-shrink: 0;
+  }
+
+  .interpretation-text {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 2px solid gold;
+    padding: 1rem;
+    border-radius: 8px;
+    color: #FFD700;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .interpretation-text h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.2rem;
+    font-family: 'Cinzel Decorative', cursive;
+    color: gold;
+  }
+
+  .interpretation-text p {
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .alchemical-symbol {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    color: #FFD700;
+    opacity: 0.8;
+  }
+
+  .glow-temp img {
+    animation: glowPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes glowPulse {
+    0% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+    50% { box-shadow: 0 0 40px rgba(255, 215, 0, 1); }
+    100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+  }
+
+  .hidden {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  #interpretacion-anchor {
+    display: contents;
+  }
+
+  @media (max-width: 600px) {
     .card {
-      flex: 0 0 auto;
-      width: 80px;
-      scroll-snap-align: center;
-      cursor: pointer;
-      position: relative;
-      transition: transform 0.3s;
-    }
-
-    .card img {
-      width: 100%;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-      transition: box-shadow 0.3s ease, transform 0.3s ease;
-    }
-
-    .card:hover img {
-      box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
-      transform: scale(1.05);
-    }
-
-    .card.selected img {
-      box-shadow: 0 0 20px rgba(255, 215, 0, 1);
-      transform: scale(1.1);
+      width: 65px;
     }
 
     .card-title {
-      position: absolute;
-      bottom: 8px;
-      left: 0;
-      right: 0;
-      text-align: center;
-      font-size: 0.75rem;
-      background: rgba(0,0,0,0.6);
-      padding: 4px;
-      border-radius: 0 0 10px 10px;
-      opacity: 0;
-      transition: opacity 0.3s;
+      font-size: 0.6rem;
     }
 
-    .card:hover .card-title {
-      opacity: 1;
+    h2 {
+      font-size: 1rem;
+      margin: 1rem 0 0.0rem;
     }
 
-    @media (max-width: 600px) {
-      .card {
-        width: 65px;
-      }
-
-      .card-title {
-        font-size: 0.6rem;
-      }
-
-
-      h2 {
-        font-size: 1rem;
-        color: #FFD700;
-        margin: 1rem 0 0.0rem; /* ← Ajustado aquí */
-        text-align: center;
-        font-family: 'Cinzel Decorative', cursive;
-      }
-
-      .button-container {
-  text-align: center;
-  margin-top: 2rem;
-}
-
-
-}
-body.mystic-glow {
-  animation: glowFade 1.5s ease-in-out;
-}
-
-@keyframes glowFade {
-  0% {
-    box-shadow: inset 0 0 100px rgba(255, 215, 0, 0.2);
-    background-color: #1f1a2e;
+    .carousel-container {
+      justify-content: flex-start;
+      padding-left: 0.5rem;
+    }
   }
-  50% {
-    box-shadow: inset 0 0 200px rgba(255, 215, 0, 0.4);
-    background-color: #292042;
-  }
-  100% {
-    box-shadow: inset 0 0 100px rgba(255, 215, 0, 0.2);
-    background-color: #1a1a2e;
-  }
-}
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 
-@keyframes glowPulse {
-  0% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
-  50% { box-shadow: 0 0 40px rgba(255, 215, 0, 1); }
-  100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
-}
+</style>
 
-@keyframes fadeInOut {
-  0% { opacity: 0; }
-  20% { opacity: 1; }
-  80% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
-.glow-temp img {
-  animation: glowPulse 2s ease-in-out infinite;
-}
-
-.btn-continue {
-  display: none;
-  background: radial-gradient(circle at center, #FFD700 0%, #b38600 100%);
-  color: #1A1A2E;
-  border: 1px solid #FFD700;
-  padding: 10px 24px;
-  font-size: 1rem;
-  font-family: 'Cinzel Decorative', cursive;
-  letter-spacing: 1px;
-  cursor: pointer;
-  border-radius: 8px;
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
-  transition: all 0.4s ease;
-  text-transform: uppercase;
-}
-
-.btn-continue:hover {
-  background: #FFD700;
-  color: #000;
-  box-shadow: 0 0 25px rgba(255, 215, 0, 0.7);
-}
-.button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 2rem;
-  width: 100%;
-}
-
-
-.btn-continue.active {
-  display: inline-block;
-}
-
-.carousel-container {
-  overflow-x: auto;
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 1rem;
-  padding-bottom: 1rem;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  justify-content: center; /* Por defecto centrado */
-  padding-left: 0.2rem; /* Añade esto */
-}
-
-@media (max-width: 600px) {
-  .carousel-container {
-    justify-content: flex-start; /* Alineado a la izquierda en móviles */
-    padding-left: 0.5rem;
-  }
-}
-
-#selectedCardsView {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 2rem;
-}
-
-.symbol {
-  width: 80px;
-  height: 80px;
-  background: url('https://media.atomicatpages.net/u/VKdhbutUBLg5pZCmDWr4fJf466f1/Pictures/gdwgon2513836.png') no-repeat center;
-  background-size: contain;
-  filter: brightness(0) saturate(100%) invert(65%) sepia(79%) saturate(400%) hue-rotate(5deg) brightness(95%) contrast(90%);
-  animation: spin 3s linear infinite;
-  margin: 2rem auto;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-#interpretation {
-  max-width: 700px;
-  margin: 2rem auto;
-  padding: 1.5rem 1.5rem;
-  background: rgba(0, 0, 0, 0.4);
-  font-style: italic;
-  font-size: 1.1rem;
-  color: #FFD700;
-  white-space: pre-line;
-  font-family: 'Playfair Display', serif;
-  border-left: none;
-  display: none; /* oculto por defecto */
-}
-
-#interpretation.hidden {
-  display: none !important;
-  height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden;
-}
-
-    
-
-.alchemical-symbol {
-  font-size: 1.5rem;
-  text-align: center;
-  margin-bottom: 0.5rem;
-  color: #FFD700;
-  opacity: 0.8;
-}
-    
-
-.card-interpretation-block {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  opacity: 0;
-  transform: translateY(-40px);
-  transition: all 0.8s ease;
-}
-
-.card-interpretation-block.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.card-interpretation-block .static-card {
-  width: 100px;
-  flex-shrink: 0;
-}
-
-.interpretation-text {
-  flex: 1;
-  background: rgba(255, 255, 255, 0.05);
-  border-left: 2px solid gold;
-  padding: 1rem;
-  border-radius: 8px;
-  color: #FFD700;
-  font-family: 'Playfair Display', serif;
-}
-
-.interpretation-text h3 {
-  margin: 0 0 0.5rem;
-  font-size: 1.2rem;
-  font-family: 'Cinzel Decorative', cursive;
-  color: gold;
-}
-
-.interpretation-text p {
-  margin: 0;
-  line-height: 1.5;
-}
-
-    #interpretacion-anchor {
-  display: contents;
-}
-
-#interpretation:empty {
-  display: none !important;
-  height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-    
-
-    .symbol-loading {
-  width: 80px;
-  height: 80px;
-  margin: 2rem auto;
-  border: 4px solid rgba(255, 215, 0, 0.2);
-  border-top: 4px solid gold;
-  border-radius: 50%;
-  animation: spin 1.2s linear infinite;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-    #selectedCardsView,
-#interpretation,
-.symbol-loading {
-  display: none;
-}
-
-    #selectedCardsView[style*="display: none"] {
-  height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-
-    .hidden {
-  display: none !important;
-  height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-}
-    
-
-  </style>
 
 </head>
 
@@ -456,179 +373,172 @@ html, body {
 </div>
 
 <script>
-  window.addEventListener('DOMContentLoaded', () => {
-    const cards = document.querySelectorAll('.card');
-    const continueButton = document.getElementById('continueButton');
-    const magicMessage = document.getElementById('magicMessage');
-    const selectedCards = new Set();
-    const anchor = document.getElementById('interpretacion-anchor');
+window.addEventListener('DOMContentLoaded', () => {
+  const cards = document.querySelectorAll('.card');
+  const continueButton = document.getElementById('continueButton');
+  const magicMessage = document.getElementById('magicMessage');
+  const selectedCards = new Set();
 
-    // 1. Selected cards container
-    const selectedCardsView = document.createElement('div');
-    selectedCardsView.className = 'carousel-container hidden';
-    selectedCardsView.id = 'selectedCardsView';
-    anchor.appendChild(selectedCardsView);
+  // Vista de cartas seleccionadas
+  const selectedCardsView = document.createElement('div');
+  selectedCardsView.className = 'carousel-container';
+  selectedCardsView.id = 'selectedCardsView';
+  selectedCardsView.style.display = 'none';
+  document.body.appendChild(selectedCardsView);
 
-    // 2. Interpretation container
-    const interpretation = document.createElement('div');
-    interpretation.id = 'interpretation';
-    interpretation.classList.add('hidden');
-    anchor.appendChild(interpretation);
+  // Interpretación
+  const interpretation = document.createElement('div');
+  interpretation.id = 'interpretation';
+  interpretation.classList.add('hidden');
 
-    // 3. Loading icon
-    const loadingSymbol = document.createElement('div');
-    loadingSymbol.className = 'symbol-loading';
-    loadingSymbol.style.display = 'none';
-    anchor.insertBefore(loadingSymbol, interpretation);
+  const anchor = document.getElementById('interpretacion-anchor');
+  if (anchor) anchor.appendChild(interpretation);
 
-    // 4. Messages
-    const messages = [
-      "Tu energía ha convocado símbolos ancestrales",
-      "El Codex ha respondido a tu vibración",
-      "Un portal interior acaba de abrirse",
-      "El círculo está completo, presiona continuar",
-      "Los fragmentos han sido elegidos por tu alma"
-    ];
+  // Símbolo de carga
+  const loadingSymbol = document.createElement('div');
+  loadingSymbol.className = 'symbol-loading';
+  loadingSymbol.style.display = 'none';
+  if (anchor) anchor.insertBefore(loadingSymbol, interpretation);
 
-    // 5. Selección de cartas
-    cards.forEach(card => {
-      const title = card.querySelector('.card-title');
-      card.addEventListener('click', () => {
-        const isSelected = card.classList.contains('selected');
-        if (!isSelected && selectedCards.size >= 4) return;
+  const messages = [
+    "Tu energía ha convocado símbolos ancestrales",
+    "El Codex ha respondido a tu vibración",
+    "Un portal interior acaba de abrirse",
+    "El círculo está completo, presiona continuar",
+    "Los fragmentos han sido elegidos por tu alma"
+  ];
 
-        card.classList.toggle('selected');
-        if (!isSelected) {
-          selectedCards.add(card);
-          if (title) title.style.opacity = '1';
-        } else {
-          selectedCards.delete(card);
-          if (title) title.style.opacity = '0';
-        }
+  cards.forEach(card => {
+    const title = card.querySelector('.card-title');
 
-        const isFour = selectedCards.size === 4;
-        continueButton.classList.toggle('active', isFour);
+    card.addEventListener('click', () => {
+      const isSelected = card.classList.contains('selected');
+      if (!isSelected && selectedCards.size >= 4) return;
 
-        if (isFour) {
-          const msg = messages[Math.floor(Math.random() * messages.length)];
-          magicMessage.innerHTML = `
-            <p>${msg}</p>
-            <button onclick="document.getElementById('continueButton').scrollIntoView({ behavior: 'smooth' });"
-            style="margin-top: 1rem; padding: 8px 16px; font-size: 1rem; background-color: gold; color: black; border: none; border-radius: 5px; cursor: pointer;">Revelar</button>
-          `;
-          magicMessage.style.display = 'block';
-          const last = [...selectedCards][3];
-          last.classList.add('glow-temp');
-          setTimeout(() => {
-            magicMessage.style.display = 'none';
-            last.classList.remove('glow-temp');
-          }, 3000);
-        }
-      });
-    });
+      card.classList.toggle('selected');
+      if (!isSelected) {
+        selectedCards.add(card);
+        if (title) title.style.opacity = '1';
+      } else {
+        selectedCards.delete(card);
+        if (title) title.style.opacity = '0';
+      }
 
-    // 6. Interpretación al hacer click en "Revelar"
-    continueButton.addEventListener('click', async () => {
-      document.querySelectorAll('.carousel-container').forEach(c => c.style.display = 'none');
-      document.querySelectorAll('h2').forEach(h => h.style.display = 'none');
-      continueButton.style.display = 'none';
+      const isFourSelected = selectedCards.size === 4;
+      continueButton.classList.toggle('active', isFourSelected);
 
-      selectedCardsView.innerHTML = '';
-      selectedCardsView.classList.remove('hidden');
-      selectedCardsView.style.opacity = '1';
-      selectedCardsView.style.display = 'flex';
-
-      const orderedCards = [...selectedCards];
-      orderedCards.forEach(card => {
-        const title = card.querySelector('.card-title');
-        if (title) title.style.display = 'none';
-        selectedCardsView.appendChild(card);
-      });
-
-      loadingSymbol.style.display = 'block';
-      interpretation.classList.remove('hidden');
-      interpretation.innerHTML = '<p>Los símbolos han sido revelados... conectando con la Fuente...</p>';
-
-
-      
-
-      const ids = orderedCards.map(c => parseInt(c.getAttribute('data-id')));
-      const payload = {
-        selectedCards: ids,
-        positions: ["Umbral", "Voz", "Desafío", "Sendero"]
-      };
-
-      try {
-        const response = await fetch('https://codex-hermetico.vercel.app/api/predict', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        const result = await response.json();
-        console.log("🧪 Resultado crudo de IA:", result);
-        loadingSymbol.style.display = 'none';
-        interpretation.innerHTML = ''; // limpio antes de agregar bloques
-
-        selectedCardsView.style.transition = 'opacity 1.2s ease';
-        selectedCardsView.style.opacity = '0';
+      if (isFourSelected) {
+        const msg = messages[Math.floor(Math.random() * messages.length)];
+        magicMessage.innerHTML = `
+          <p>${msg}</p>
+          <button onclick="document.getElementById('continueButton').scrollIntoView({ behavior: 'smooth' });" style="margin-top: 1rem; padding: 8px 16px; font-size: 1rem; background-color: gold; color: black; border: none; border-radius: 5px; cursor: pointer;">Revelar</button>
+        `;
+        magicMessage.style.display = 'block';
+        const last = [...selectedCards][3];
+        last.classList.add('glow-temp');
         setTimeout(() => {
-          selectedCardsView.style.display = 'none';
-        }, 1200);
-
-        const raw = result.prediction || '';
-        const sections = raw.split(/Umbral:|Voz:|Desafío:|Sendero:/).slice(1);
-        const labels = ['Umbral', 'Voz', 'Desafío', 'Sendero'];
-
-        if (sections.length === 4) {
-          orderedCards.forEach((card, i) => {
-            const cardBlock = document.createElement('div');
-            cardBlock.className = 'card-interpretation-block';
-
-            const clonedCard = card.cloneNode(true);
-            clonedCard.classList.remove('glow-temp');
-            clonedCard.classList.add('static-card');
-
-            const interpretationText = document.createElement('div');
-            interpretationText.className = 'interpretation-text';
-            interpretationText.innerHTML = `
-              <h3>${labels[i]}</h3>
-              <p>${sections[i].trim()}</p>`;
-
-            cardBlock.appendChild(clonedCard);
-            cardBlock.appendChild(interpretationText);
-            interpretation.appendChild(cardBlock);
-
-            setTimeout(() => {
-              cardBlock.classList.add('visible');
-              const sound = document.getElementById('chimeSound');
-              if (sound) sound.play();
-
-              if (i === orderedCards.length - 1 && anchor) {
-                setTimeout(() => {
-                  anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 1000);
-              }
-            }, i * 1200);
-          });
-        } else {
-          interpretation.innerHTML = `
-            <div class="card-interpretation-block visible" style="flex-direction: column; text-align: left;">
-              <p style="color: #FFD700; font-style: italic;">No se pudo dividir la interpretación en secciones. A continuación, el mensaje completo:</p>
-              <div class="interpretation-text" style="margin-top: 1rem;">
-                ${raw.replace(/\n/g, '<br>')}
-              </div>
-            </div>
-          `;
-        }
-
-      } catch (err) {
-        loadingSymbol.style.display = 'none';
-        interpretation.innerText = 'El portal se cerró antes de tiempo... intenta de nuevo más tarde.';
+          magicMessage.style.display = 'none';
+          last.classList.remove('glow-temp');
+        }, 3000);
       }
     });
   });
+
+  continueButton.addEventListener('click', async () => {
+    // Oculta carruseles y títulos
+    document.querySelectorAll('.carousel-container').forEach(c => c.style.display = 'none');
+    document.querySelectorAll('h2').forEach(h => h.style.display = 'none');
+    continueButton.style.display = 'none';
+
+    // Muestra cartas seleccionadas
+    selectedCardsView.innerHTML = '';
+    selectedCardsView.style.display = 'flex';
+    const orderedCards = [...selectedCards];
+    orderedCards.forEach(card => {
+      const title = card.querySelector('.card-title');
+      if (title) title.style.display = 'none';
+      selectedCardsView.appendChild(card);
+    });
+
+    // Preparación visual
+    interpretation.innerText = '';
+    interpretation.classList.add('hidden');
+    loadingSymbol.style.display = 'block';
+
+    const ids = orderedCards.map(c => parseInt(c.getAttribute('data-id')));
+    const payload = {
+      selectedCards: ids,
+      positions: ["Umbral", "Voz", "Desafío", "Sendero"]
+    };
+
+    try {
+      const response = await fetch('https://codex-hermetico.vercel.app/api/predict', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json();
+      loadingSymbol.style.display = 'none';
+      interpretation.innerHTML = '';
+
+      const raw = result.prediction || '';
+      const sections = raw.split(/Umbral:|Voz:|Desafío:|Sendero:/).slice(1);
+      const labels = ['Umbral', 'Voz', 'Desafío', 'Sendero'];
+
+      if (sections.length === 4) {
+        orderedCards.forEach((card, i) => {
+          const cardBlock = document.createElement('div');
+          cardBlock.className = 'card-interpretation-block';
+
+          const clonedCard = card.cloneNode(true);
+          clonedCard.classList.remove('glow-temp');
+          clonedCard.classList.add('static-card');
+
+          const interpretationText = document.createElement('div');
+          interpretationText.className = 'interpretation-text';
+          interpretationText.innerHTML = `
+            <h3>${labels[i]}</h3>
+            <p>${sections[i].trim()}</p>`;
+
+          cardBlock.appendChild(clonedCard);
+          cardBlock.appendChild(interpretationText);
+          interpretation.appendChild(cardBlock);
+
+          setTimeout(() => {
+            cardBlock.classList.add('visible');
+            const sound = document.getElementById('chimeSound');
+            if (sound) sound.play();
+
+            if (i === orderedCards.length - 1 && anchor) {
+              setTimeout(() => {
+                interpretation.classList.remove('hidden');
+                anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }, 800);
+            }
+          }, i * 1200);
+        });
+      } else {
+        interpretation.innerHTML = `
+          <div class="card-interpretation-block visible" style="flex-direction: column; text-align: left;">
+            <p style="color: #FFD700; font-style: italic;">No se pudo dividir la interpretación en secciones. A continuación, el mensaje completo:</p>
+            <div class="interpretation-text" style="margin-top: 1rem;">
+              ${raw.replace(/\n/g, '<br>')}
+            </div>
+          </div>
+        `;
+        interpretation.classList.remove('hidden');
+      }
+
+    } catch (err) {
+      loadingSymbol.style.display = 'none';
+      interpretation.innerText = 'El portal se cerró antes de tiempo... intenta de nuevo más tarde.';
+      interpretation.classList.remove('hidden');
+    }
+  });
+});
 </script>
+
 
 
 
