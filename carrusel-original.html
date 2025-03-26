@@ -461,27 +461,27 @@ html, body {
     const continueButton = document.getElementById('continueButton');
     const magicMessage = document.getElementById('magicMessage');
     const selectedCards = new Set();
-
     const anchor = document.getElementById('interpretacion-anchor');
 
-    // Crear y agregar contenedor de las 4 cartas seleccionadas
+    // 1. Selected cards container
     const selectedCardsView = document.createElement('div');
     selectedCardsView.className = 'carousel-container hidden';
     selectedCardsView.id = 'selectedCardsView';
-    if (anchor) anchor.appendChild(selectedCardsView);
+    anchor.appendChild(selectedCardsView);
 
-    // Crear y agregar el contenedor de interpretación
+    // 2. Interpretation container
     const interpretation = document.createElement('div');
     interpretation.id = 'interpretation';
     interpretation.classList.add('hidden');
-    if (anchor) anchor.appendChild(interpretation);
+    anchor.appendChild(interpretation);
 
-    // Ícono animado
+    // 3. Loading icon
     const loadingSymbol = document.createElement('div');
     loadingSymbol.className = 'symbol-loading';
     loadingSymbol.style.display = 'none';
-    if (anchor) anchor.insertBefore(loadingSymbol, interpretation);
+    anchor.insertBefore(loadingSymbol, interpretation);
 
+    // 4. Messages
     const messages = [
       "Tu energía ha convocado símbolos ancestrales",
       "El Codex ha respondido a tu vibración",
@@ -490,9 +490,9 @@ html, body {
       "Los fragmentos han sido elegidos por tu alma"
     ];
 
+    // 5. Selección de cartas
     cards.forEach(card => {
       const title = card.querySelector('.card-title');
-
       card.addEventListener('click', () => {
         const isSelected = card.classList.contains('selected');
         if (!isSelected && selectedCards.size >= 4) return;
@@ -506,14 +506,15 @@ html, body {
           if (title) title.style.opacity = '0';
         }
 
-        const isFourSelected = selectedCards.size === 4;
-        continueButton.classList.toggle('active', isFourSelected);
+        const isFour = selectedCards.size === 4;
+        continueButton.classList.toggle('active', isFour);
 
-        if (isFourSelected) {
+        if (isFour) {
           const msg = messages[Math.floor(Math.random() * messages.length)];
           magicMessage.innerHTML = `
             <p>${msg}</p>
-            <button onclick="document.getElementById('continueButton').scrollIntoView({ behavior: 'smooth' });" style="margin-top: 1rem; padding: 8px 16px; font-size: 1rem; background-color: gold; color: black; border: none; border-radius: 5px; cursor: pointer;">Revelar</button>
+            <button onclick="document.getElementById('continueButton').scrollIntoView({ behavior: 'smooth' });"
+            style="margin-top: 1rem; padding: 8px 16px; font-size: 1rem; background-color: gold; color: black; border: none; border-radius: 5px; cursor: pointer;">Revelar</button>
           `;
           magicMessage.style.display = 'block';
           const last = [...selectedCards][3];
@@ -526,6 +527,7 @@ html, body {
       });
     });
 
+    // 6. Interpretación al hacer click en "Revelar"
     continueButton.addEventListener('click', async () => {
       document.querySelectorAll('.carousel-container').forEach(c => c.style.display = 'none');
       document.querySelectorAll('h2').forEach(h => h.style.display = 'none');
@@ -533,6 +535,7 @@ html, body {
 
       selectedCardsView.innerHTML = '';
       selectedCardsView.classList.remove('hidden');
+      selectedCardsView.style.opacity = '1';
       selectedCardsView.style.display = 'flex';
 
       const orderedCards = [...selectedCards];
@@ -542,9 +545,9 @@ html, body {
         selectedCardsView.appendChild(card);
       });
 
-      interpretation.classList.remove('hidden');
-      interpretation.innerText = 'Los símbolos han sido revelados... conectando con la Fuente...';
       loadingSymbol.style.display = 'block';
+      interpretation.classList.remove('hidden');
+      interpretation.innerHTML = '<p>Los símbolos han sido revelados... conectando con la Fuente...</p>';
 
       const ids = orderedCards.map(c => parseInt(c.getAttribute('data-id')));
       const payload = {
@@ -561,11 +564,13 @@ html, body {
 
         const result = await response.json();
         loadingSymbol.style.display = 'none';
-        interpretation.innerText = '';
+        interpretation.innerHTML = ''; // limpio antes de agregar bloques
 
         selectedCardsView.style.transition = 'opacity 1.2s ease';
         selectedCardsView.style.opacity = '0';
-        setTimeout(() => selectedCardsView.style.display = 'none', 1200);
+        setTimeout(() => {
+          selectedCardsView.style.display = 'none';
+        }, 1200);
 
         const raw = result.prediction || '';
         const sections = raw.split(/Umbral:|Voz:|Desafío:|Sendero:/).slice(1);
@@ -611,7 +616,6 @@ html, body {
               </div>
             </div>
           `;
-          console.warn('[Codex Debug] Formato inesperado en respuesta de IA:', raw);
         }
 
       } catch (err) {
@@ -621,6 +625,7 @@ html, body {
     });
   });
 </script>
+
 
 
 
