@@ -287,6 +287,64 @@ body.mystic-glow {
   pointer-events: none;
 }
 
+.card-interpretation-block.vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin: 3rem auto;
+  max-width: 680px;
+  padding: 1.5rem;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
+  position: relative;
+  z-index: 1;
+  transition: all 0.8s ease;
+}
+
+.card-interpretation-block.vertical .static-card {
+  width: 160px;
+  max-width: 80%;
+  filter: drop-shadow(0 0 10px gold);
+}
+
+.card-interpretation-block.vertical .interpretation-text {
+  background: rgba(255, 255, 255, 0.05);
+  border-left: none;
+  border-top: 2px solid gold;
+  padding: 1.2rem 1.5rem;
+  border-radius: 12px;
+  color: #FFD700;
+  font-family: 'Playfair Display', serif;
+  text-align: justify;
+  max-width: 100%;
+}
+
+.card-interpretation-block.vertical .interpretation-text h3 {
+  margin-bottom: 0.8rem;
+  font-size: 1.4rem;
+  font-family: 'Cinzel Decorative', cursive;
+  color: gold;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 0 0 6px rgba(255, 215, 0, 0.4);
+}
+
+.card-interpretation-block.vertical .interpretation-text p {
+  line-height: 1.65;
+  font-size: 1.1rem;
+}
+
+.card-interpretation-block.vertical .interpretation-text p:first-letter {
+  font-size: 2rem;
+  color: gold;
+  float: left;
+  margin-right: 0.3rem;
+  line-height: 1;
+}
+   
+
 </style>
 
 
@@ -512,7 +570,7 @@ body.mystic-glow {
         if (sections.length === 4) {
           orderedCards.forEach((card, i) => {
             const cardBlock = document.createElement('div');
-            cardBlock.className = 'card-interpretation-block';
+            cardBlock.className = 'card-interpretation-block vertical';
 
             const clonedCard = card.cloneNode(true);
             clonedCard.classList.remove('glow-temp');
