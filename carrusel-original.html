@@ -337,6 +337,15 @@ html, body {
   padding: 0 !important;
 }
 
+.hidden {
+  display: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+    
 
   </style>
 
@@ -451,20 +460,21 @@ html, body {
     const magicMessage = document.getElementById('magicMessage');
     const selectedCards = new Set();
 
-    const selectedCardsView = document.createElement('div');
-    selectedCardsView.className = 'carousel-container';
-    selectedCardsView.id = 'selectedCardsView';
-    selectedCardsView.style.display = 'none';
-    selectedCardsView.style.justifyContent = 'center';
-    document.body.appendChild(selectedCardsView);
+    const anchor = document.getElementById('interpretacion-anchor');
 
+    // Crear y agregar contenedor de las 4 cartas seleccionadas
+    const selectedCardsView = document.createElement('div');
+    selectedCardsView.className = 'carousel-container hidden';
+    selectedCardsView.id = 'selectedCardsView';
+    if (anchor) anchor.appendChild(selectedCardsView);
+
+    // Crear y agregar el contenedor de interpretación
     const interpretation = document.createElement('div');
     interpretation.id = 'interpretation';
-    interpretation.classList.add('hidden'); // Oculto al iniciar
-
-    const anchor = document.getElementById('interpretacion-anchor');
+    interpretation.classList.add('hidden');
     if (anchor) anchor.appendChild(interpretation);
 
+    // Ícono animado
     const loadingSymbol = document.createElement('div');
     loadingSymbol.className = 'symbol-loading';
     loadingSymbol.style.display = 'none';
@@ -520,15 +530,17 @@ html, body {
       continueButton.style.display = 'none';
 
       selectedCardsView.innerHTML = '';
+      selectedCardsView.classList.remove('hidden');
       selectedCardsView.style.display = 'flex';
-      const orderedCards = [...selectedCards];
 
+      const orderedCards = [...selectedCards];
       orderedCards.forEach(card => {
         const title = card.querySelector('.card-title');
         if (title) title.style.display = 'none';
         selectedCardsView.appendChild(card);
       });
 
+      interpretation.classList.remove('hidden');
       interpretation.innerText = 'Los símbolos han sido revelados... conectando con la Fuente...';
       loadingSymbol.style.display = 'block';
 
@@ -547,9 +559,7 @@ html, body {
 
         const result = await response.json();
         loadingSymbol.style.display = 'none';
-        interpretation.innerHTML = '';
-        interpretation.classList.remove('hidden'); // Mostrar interpretación
-        interpretation.style.display = 'block'; // Asegurarse de que se muestre
+        interpretation.innerText = '';
 
         selectedCardsView.style.transition = 'opacity 1.2s ease';
         selectedCardsView.style.opacity = '0';
