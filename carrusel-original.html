@@ -236,6 +236,50 @@ html, body {
 }
 
 
+.card-interpretation-block {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  opacity: 0;
+  transform: translateY(-40px);
+  transition: all 0.8s ease;
+}
+
+.card-interpretation-block.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card-interpretation-block .static-card {
+  width: 100px;
+  flex-shrink: 0;
+}
+
+.interpretation-text {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 2px solid gold;
+  padding: 1rem;
+  border-radius: 8px;
+  color: #FFD700;
+  font-family: 'Playfair Display', serif;
+}
+
+.interpretation-text h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.2rem;
+  font-family: 'Cinzel Decorative', cursive;
+  color: gold;
+}
+
+.interpretation-text p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+    
+
   </style>
 
 </head>
