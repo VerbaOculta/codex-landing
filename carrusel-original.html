@@ -285,9 +285,11 @@ html, body {
   margin: 0;
   line-height: 1.5;
 }
-#interpretacion-anchor {
-  margin-top: 2rem;
+
+    #interpretacion-anchor {
+  display: contents;
 }
+
 
     .symbol-loading {
   width: 80px;
@@ -302,6 +304,18 @@ html, body {
 @keyframes spin {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
+}
+
+    #selectedCardsView,
+#interpretation,
+.symbol-loading {
+  display: none;
+}
+
+    #selectedCardsView[style*="display: none"] {
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 
@@ -384,7 +398,8 @@ html, body {
     </div>
   </div>
 
-  <section id="interpretacion-anchor"></section>
+  <section id="interpretacion-anchor" style="margin: 0; padding: 0;"></section>
+
 
 <div class="button-container">
   <button class="btn-continue" id="continueButton">✨ Revelar los Fragmentos</button>
