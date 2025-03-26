@@ -560,42 +560,46 @@ h2 {
 </div>
 
 
-  <script>
-  const quizOptions = document.querySelectorAll('.quiz-option');
-  const continueBtn = document.getElementById('quizContinue');
-  const quizSection = document.getElementById('quizSection');
-  let selectedIntent = null;
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const quizOptions = document.querySelectorAll('.quiz-option');
+    const continueBtn = document.getElementById('quizContinue');
+    const quizSection = document.getElementById('quizSection');
+    let selectedIntent = null;
 
-  quizOptions.forEach(option => {
-    option.addEventListener('click', () => {
-      quizOptions.forEach(o => o.classList.remove('selected'));
-      option.classList.add('selected');
-      selectedIntent = option.getAttribute('data-intent');
-      continueBtn.disabled = false;
+    // Interacción con opciones del quiz
+    quizOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        quizOptions.forEach(o => o.classList.remove('selected'));
+        option.classList.add('selected');
+        selectedIntent = option.getAttribute('data-intent');
+        continueBtn.disabled = false;
+      });
     });
+
+    // Acción al presionar continuar
+    continueBtn.addEventListener('click', () => {
+      console.log('Intención seleccionada:', selectedIntent);
+      // Puedes guardar la intención en localStorage o continuar el flujo
+    });
+
+    // Mostrar quiz desde otra parte del flujo
+    window.mostrarQuizConTransicion = function () {
+      const interpretation = document.getElementById('interpretation');
+      const transitionMsg = document.createElement('div');
+      transitionMsg.innerHTML = `
+        <p style="text-align: center; font-size: 1.2rem; font-style: italic; color: gold; margin: 3rem auto; max-width: 640px;">
+          Ahora que el Codex ha revelado sus fragmentos, háblanos de ti... <br>
+          ¿Qué deseas realmente manifestar?
+        </p>
+      `;
+      interpretation.appendChild(transitionMsg);
+      quizSection.style.display = 'block';
+    };
   });
-
-  continueBtn.addEventListener('click', () => {
-    console.log('Intención seleccionada:', selectedIntent);
-    // Aquí se puede integrar el paso siguiente con la intención capturada.
-    // Por ejemplo: guardar en localStorage o enviarla al backend.
-  });
-
-  function mostrarQuizConTransicion() {
-    const interpretation = document.getElementById('interpretation');
-    const transitionMsg = document.createElement('div');
-    transitionMsg.innerHTML = `
-      <p style="text-align: center; font-size: 1.2rem; font-style: italic; color: gold; margin: 3rem auto; max-width: 640px;">
-        Ahora que el Codex ha revelado sus fragmentos, háblanos de ti... <br>
-        ¿Qué deseas realmente manifestar?
-      </p>
-    `;
-    interpretation.appendChild(transitionMsg);
-    quizSection.style.display = 'block';
-  }
-
-  window.mostrarQuizConTransicion = mostrarQuizConTransicion;
 </script>
+
+  
 
 <script>
   window.addEventListener('DOMContentLoaded', () => {
