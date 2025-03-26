@@ -8,14 +8,32 @@
 
  <style>
 
-body {
+/* ==================== RESET & BASE ==================== */
+html, body {
+  height: 100%;
   margin: 0;
-  padding: 2rem;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Playfair Display', serif;
   background: linear-gradient(to bottom, #0D0D0D, #1A1A2E);
   color: #fff;
-  font-family: 'Playfair Display', serif;
 }
 
+body {
+  padding: 2rem;
+}
+
+body.mystic-glow {
+  animation: glowFade 1.5s ease-in-out;
+}
+
+@keyframes glowFade {
+  0% { box-shadow: inset 0 0 100px rgba(255, 215, 0, 0.2); background-color: #1f1a2e; }
+  50% { box-shadow: inset 0 0 200px rgba(255, 215, 0, 0.4); background-color: #292042; }
+  100% { box-shadow: inset 0 0 100px rgba(255, 215, 0, 0.2); background-color: #1a1a2e; }
+}
+
+/* ==================== HEADINGS ==================== */
 h2 {
   font-size: 1.5rem;
   color: #FFD700;
@@ -24,6 +42,14 @@ h2 {
   font-family: 'Cinzel Decorative', cursive;
 }
 
+@media (max-width: 600px) {
+  h2 {
+    font-size: 1rem;
+    margin: 1rem 0 0rem;
+  }
+}
+
+/* ==================== CAROUSEL ==================== */
 .carousel-container {
   display: flex;
   flex-wrap: nowrap;
@@ -35,6 +61,14 @@ h2 {
   overflow-x: auto;
   max-width: 100%;
   margin: 0 auto;
+  padding-left: 0.2rem;
+}
+
+@media (max-width: 600px) {
+  .carousel-container {
+    justify-content: flex-start;
+    padding-left: 0.5rem;
+  }
 }
 
 .card {
@@ -70,7 +104,7 @@ h2 {
   right: 0;
   text-align: center;
   font-size: 0.75rem;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0,0,0,0.6);
   padding: 4px;
   border-radius: 0 0 10px 10px;
   opacity: 0;
@@ -89,67 +123,16 @@ h2 {
   .card-title {
     font-size: 0.6rem;
   }
-
-  h2 {
-    font-size: 1rem;
-    margin: 1rem 0 0rem;
-  }
-
-  .button-container {
-    text-align: center;
-    margin-top: 2rem;
-  }
 }
 
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body.mystic-glow {
-  animation: glowFade 1.5s ease-in-out;
-}
-
-@keyframes glowFade {
-  0% {
-    box-shadow: inset 0 0 100px rgba(255, 215, 0, 0.2);
-    background-color: #1f1a2e;
-  }
-  50% {
-    box-shadow: inset 0 0 200px rgba(255, 215, 0, 0.4);
-    background-color: #292042;
-  }
-  100% {
-    box-shadow: inset 0 0 100px rgba(255, 215, 0, 0.2);
-    background-color: #1a1a2e;
-  }
-}
-
-@keyframes glowPulse {
-  0% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
-  50% { box-shadow: 0 0 40px rgba(255, 215, 0, 1); }
-  100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
-}
-
-@keyframes fadeInOut {
-  0% { opacity: 0; }
-  20% { opacity: 1; }
-  80% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
-.glow-temp img {
-  animation: glowPulse 2s ease-in-out infinite;
-}
-
+/* ==================== BUTTON ==================== */
 .button-container {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 2rem;
   width: 100%;
+  text-align: center;
 }
 
 .btn-continue {
@@ -178,11 +161,20 @@ body.mystic-glow {
   display: inline-block;
 }
 
-#selectedCardsView {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 2rem;
+/* ==================== LOADING & SYMBOL ==================== */
+.symbol-loading {
+  width: 80px;
+  height: 80px;
+  margin: 2rem auto;
+  border: 4px solid rgba(255, 215, 0, 0.2);
+  border-top: 4px solid gold;
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 
 .symbol {
@@ -195,11 +187,7 @@ body.mystic-glow {
   margin: 2rem auto;
 }
 
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
+/* ==================== INTERPRETACIÓN ==================== */
 #interpretation {
   max-width: 700px;
   margin: 2rem auto;
@@ -210,26 +198,33 @@ body.mystic-glow {
   color: #FFD700;
   white-space: pre-line;
   font-family: 'Playfair Display', serif;
-  border-left: none;
+  border-left: none !important;
 }
 
-/* Ocultamiento controlado por clase */
-.hidden {
+#interpretation.hidden,
+#interpretation:empty {
   display: none !important;
   height: 0 !important;
   margin: 0 !important;
   padding: 0 !important;
-  overflow: hidden !important;
+  overflow: hidden;
 }
 
+#interpretacion-anchor {
+  display: contents;
+}
+
+/* ==================== INTERPRETACIÓN BLOQUES ==================== */
 .card-interpretation-block {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin: 3rem auto;
   opacity: 0;
   transform: translateY(-40px);
   transition: all 0.8s ease;
+  max-width: 640px;
 }
 
 .card-interpretation-block.visible {
@@ -238,54 +233,68 @@ body.mystic-glow {
 }
 
 .card-interpretation-block .static-card {
-  width: 100px;
+  width: 120px;
   flex-shrink: 0;
+  filter: drop-shadow(0 0 8px gold);
 }
 
 .interpretation-text {
-  flex: 1;
   background: rgba(255, 255, 255, 0.05);
-  border-left: 2px solid gold;
-  padding: 1rem;
-  border-radius: 8px;
+  border-left: 3px solid gold;
+  padding: 1.2rem;
+  border-radius: 12px;
   color: #FFD700;
   font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
 }
 
 .interpretation-text h3 {
-  margin: 0 0 0.5rem;
-  font-size: 1.2rem;
+  margin: 0 0 1rem;
+  font-size: 1.4rem;
   font-family: 'Cinzel Decorative', cursive;
   color: gold;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .interpretation-text p {
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.6;
+  text-align: justify;
 }
 
-#interpretacion-anchor {
-  display: contents;
+/* ==================== GLOW & TEMP ==================== */
+@keyframes glowPulse {
+  0% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+  50% { box-shadow: 0 0 40px rgba(255, 215, 0, 1); }
+  100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
 }
 
-.symbol-loading {
-  width: 80px;
-  height: 80px;
-  margin: 2rem auto;
-  border: 4px solid rgba(255, 215, 0, 0.2);
-  border-top: 4px solid gold;
-  border-radius: 50%;
-  animation: spin 1.2s linear infinite;
+.glow-temp img {
+  animation: glowPulse 2s ease-in-out infinite;
 }
 
-.hidden-space {
+/* ==================== HIDDEN ==================== */
+.hidden {
+  display: none !important;
   height: 0 !important;
-  opacity: 0 !important;
-  overflow: hidden !important;
   margin: 0 !important;
   padding: 0 !important;
-  pointer-events: none;
+  overflow: hidden !important;
 }
+
+#selectedCardsView,
+#interpretation,
+.symbol-loading {
+  display: none;
+}
+
+#selectedCardsView[style*="display: none"] {
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
    
 </style>
 
@@ -415,7 +424,6 @@ body.mystic-glow {
 
     const interpretation = document.createElement('div');
     interpretation.id = 'interpretation';
-
     const anchor = document.getElementById('interpretacion-anchor');
     if (anchor) anchor.appendChild(interpretation);
 
@@ -434,6 +442,7 @@ body.mystic-glow {
 
     cards.forEach(card => {
       const title = card.querySelector('.card-title');
+
       card.addEventListener('click', () => {
         const isSelected = card.classList.contains('selected');
         if (!isSelected && selectedCards.size >= 4) return;
@@ -474,10 +483,8 @@ body.mystic-glow {
 
       selectedCardsView.innerHTML = '';
       selectedCardsView.style.display = 'flex';
-      selectedCardsView.style.opacity = '1';
-      selectedCardsView.classList.remove('hidden');
-
       const orderedCards = [...selectedCards];
+
       orderedCards.forEach(card => {
         const title = card.querySelector('.card-title');
         if (title) title.style.display = 'none';
@@ -485,7 +492,7 @@ body.mystic-glow {
       });
 
       interpretation.innerText = 'Los símbolos han sido revelados... conectando con la Fuente...';
-      interpretation.classList.remove('hidden');
+      interpretation.classList.add('active');
       loadingSymbol.style.display = 'block';
 
       const ids = orderedCards.map(c => parseInt(c.getAttribute('data-id')));
@@ -512,15 +519,17 @@ body.mystic-glow {
         if (sections.length === 4) {
           orderedCards.forEach((card, i) => {
             const cardBlock = document.createElement('div');
-            cardBlock.className = 'card-interpretation-block';
+            cardBlock.className = 'card-interpretation-block vertical';
 
             const clonedCard = card.cloneNode(true);
-            clonedCard.classList.remove('glow-temp');
+            clonedCard.classList.remove('glow-temp', 'selected');
             clonedCard.classList.add('static-card');
 
             const interpretationText = document.createElement('div');
             interpretationText.className = 'interpretation-text';
-            interpretationText.innerHTML = `<h3>${labels[i]}</h3><p>${sections[i].trim()}</p>`;
+            interpretationText.innerHTML = `
+              <h3>${labels[i]}</h3>
+              <p>${sections[i].trim()}</p>`;
 
             cardBlock.appendChild(clonedCard);
             cardBlock.appendChild(interpretationText);
@@ -534,14 +543,6 @@ body.mystic-glow {
               if (i === orderedCards.length - 1 && anchor) {
                 setTimeout(() => {
                   anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-                  // 🔄 Ocultar el grupo de 4 cartas seleccionadas después de mostrar la interpretación
-                  selectedCardsView.style.transition = 'opacity 1s ease';
-                  selectedCardsView.style.opacity = '0';
-
-                  setTimeout(() => {
-                    selectedCardsView.classList.add('hidden-space');
-                  }, 1000);
                 }, 1000);
               }
             }, i * 1200);
@@ -565,6 +566,7 @@ body.mystic-glow {
     });
   });
 </script>
+
 
 
 </body>
