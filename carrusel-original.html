@@ -525,10 +525,25 @@ interpretationText.innerHTML = `
             cardBlock.appendChild(interpretationText);
             interpretation.appendChild(cardBlock);
 
-            setTimeout(() => {
-              cardBlock.classList.add('visible');
-              cardBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, i * 1200);
+   
+
+setTimeout(() => {
+  cardBlock.classList.add('visible');
+  const sound = document.getElementById('chimeSound');
+  if (sound) sound.play();
+
+  // Solo el último bloque hace scroll al inicio del contenedor de interpretación
+  if (i === orderedCards.length - 1) {
+    setTimeout(() => {
+      interpretation.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 1000);
+  }
+}, i * 1200);
+
+
+
+
+            
           });
         } else {
           interpretation.innerHTML = `
