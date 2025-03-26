@@ -431,6 +431,10 @@ h2 {
     background: #ffd700;
     box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
   }
+
+ #quizSection {
+  display: none;
+  } 
 </style> 
 
 
@@ -555,9 +559,11 @@ h2 {
   <button class="quiz-continue" id="quizContinue" disabled>Continuar</button>
 </div>
 
-<script>
+
+  <script>
   const quizOptions = document.querySelectorAll('.quiz-option');
   const continueBtn = document.getElementById('quizContinue');
+  const quizSection = document.getElementById('quizSection');
   let selectedIntent = null;
 
   quizOptions.forEach(option => {
@@ -574,11 +580,22 @@ h2 {
     // Aquí se puede integrar el paso siguiente con la intención capturada.
     // Por ejemplo: guardar en localStorage o enviarla al backend.
   });
+
+  function mostrarQuizConTransicion() {
+    const interpretation = document.getElementById('interpretation');
+    const transitionMsg = document.createElement('div');
+    transitionMsg.innerHTML = `
+      <p style="text-align: center; font-size: 1.2rem; font-style: italic; color: gold; margin: 3rem auto; max-width: 640px;">
+        Ahora que el Codex ha revelado sus fragmentos, háblanos de ti... <br>
+        ¿Qué deseas realmente manifestar?
+      </p>
+    `;
+    interpretation.appendChild(transitionMsg);
+    quizSection.style.display = 'block';
+  }
+
+  window.mostrarQuizConTransicion = mostrarQuizConTransicion;
 </script>
-
-
-  
-  
 
 <script>
   window.addEventListener('DOMContentLoaded', () => {
@@ -648,105 +665,106 @@ h2 {
       });
     });
 
-    continueButton.addEventListener('click', async () => {
-      document.querySelectorAll('.carousel-container').forEach(c => c.style.display = 'none');
-      document.querySelectorAll('h2').forEach(h => h.style.display = 'none');
-      continueButton.style.display = 'none';
+  continueButton.addEventListener('click', async () => {
+  document.querySelectorAll('.carousel-container').forEach(c => c.style.display = 'none');
+  document.querySelectorAll('h2').forEach(h => h.style.display = 'none');
+  continueButton.style.display = 'none';
 
-      selectedCardsView.innerHTML = '';
-      selectedCardsView.style.display = 'flex';
-      selectedCardsView.style.opacity = '1';
-      selectedCardsView.classList.remove('hidden');
+  selectedCardsView.innerHTML = '';
+  selectedCardsView.style.display = 'flex';
+  selectedCardsView.style.opacity = '1';
+  selectedCardsView.classList.remove('hidden');
 
-      const orderedCards = [...selectedCards];
-      orderedCards.forEach(card => {
-        const title = card.querySelector('.card-title');
-        if (title) title.style.display = 'none';
-        selectedCardsView.appendChild(card);
-      });
-
-      interpretation.innerText = 'Los símbolos han sido revelados... conectando con la Fuente...';
-      interpretation.classList.remove('hidden');
-      loadingSymbol.style.display = 'block';
-
-      const ids = orderedCards.map(c => parseInt(c.getAttribute('data-id')));
-      const payload = {
-        selectedCards: ids,
-        positions: ["Umbral", "Voz", "Desafío", "Sendero"]
-      };
-
-      try {
-        const result = await fetchWithRetry(payload, 1, 3000); // intenta 2 veces total
-
-        loadingSymbol.style.display = 'none';
-        interpretation.innerText = '';
-
-        const raw = result.prediction || '';
-        const sections = raw.split(/Umbral:|Voz:|Desafío:|Sendero:/).slice(1);
-        const labels = ['Umbral', 'Voz', 'Desafío', 'Sendero'];
-
-        if (sections.length === 4) {
-          orderedCards.forEach((card, i) => {
-            const cardBlock = document.createElement('div');
-            cardBlock.className = 'card-interpretation-block vertical';
-
-            const clonedCard = card.cloneNode(true);
-            clonedCard.classList.remove('selected', 'glow-temp');
-            clonedCard.classList.add('static-card');
-
-            const interpretationText = document.createElement('div');
-            interpretationText.className = 'interpretation-text';
-            interpretationText.innerHTML = `<h3>${labels[i]}</h3><p>${sections[i].trim()}</p>`;
-
-            cardBlock.appendChild(clonedCard);
-            cardBlock.appendChild(interpretationText);
-            interpretation.appendChild(cardBlock);
-
-            setTimeout(() => {
-              cardBlock.classList.add('visible');
-              const sound = document.getElementById('chimeSound');
-              if (sound) sound.play();
-
-              if (i === orderedCards.length - 1 && anchor) {
-                setTimeout(() => {
-                  anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  selectedCardsView.style.transition = 'opacity 1s ease';
-                  selectedCardsView.style.opacity = '0';
-                  setTimeout(() => {
-                    selectedCardsView.classList.add('hidden-space');
-                  }, 1000);
-                }, 1000);
-              }
-            }, i * 1200);
-          });
-        } else {
-          interpretation.innerHTML = `
-            <div class="card-interpretation-block visible" style="flex-direction: column; text-align: left;">
-              <p style="color: #FFD700; font-style: italic;">No se pudo dividir la interpretación en secciones. A continuación, el mensaje completo:</p>
-              <div class="interpretation-text" style="margin-top: 1rem;">
-                ${raw.replace(/\n/g, '<br>')}
-              </div>
-            </div>
-          `;
-          console.warn('[Codex Debug] Formato inesperado en respuesta de IA:', raw);
-        }
-
-      } catch (err) {
-        loadingSymbol.style.display = 'none';
-        interpretation.innerText = 'El portal se cerró antes de tiempo... intenta de nuevo más tarde.';
-        console.error('[Codex Debug] Error de interpretación:', err);
-
-        const retryBtn = document.getElementById('retryButton');
-        if (retryBtn) {
-          retryBtn.style.display = 'inline-block';
-          retryBtn.onclick = () => {
-          retryBtn.style.display = 'none';
-          continueButton.click(); // vuelve a disparar la lógica
-          };
-        }        
-      }
-    });
+  const orderedCards = [...selectedCards];
+  orderedCards.forEach(card => {
+    const title = card.querySelector('.card-title');
+    if (title) title.style.display = 'none';
+    selectedCardsView.appendChild(card);
   });
+
+  interpretation.innerText = 'Los símbolos han sido revelados... conectando con la Fuente...';
+  interpretation.classList.remove('hidden');
+  loadingSymbol.style.display = 'block';
+
+  const ids = orderedCards.map(c => parseInt(c.getAttribute('data-id')));
+  const payload = {
+    selectedCards: ids,
+    positions: ["Umbral", "Voz", "Desafío", "Sendero"]
+  };
+
+  try {
+    const result = await fetchWithRetry(payload, 1, 3000);
+    loadingSymbol.style.display = 'none';
+    interpretation.innerText = '';
+
+    const raw = result.prediction || '';
+    const sections = raw.split(/Umbral:|Voz:|Desafío:|Sendero:/).slice(1);
+    const labels = ['Umbral', 'Voz', 'Desafío', 'Sendero'];
+
+    if (sections.length === 4) {
+      orderedCards.forEach((card, i) => {
+        const cardBlock = document.createElement('div');
+        cardBlock.className = 'card-interpretation-block vertical';
+
+        const clonedCard = card.cloneNode(true);
+        clonedCard.classList.remove('selected', 'glow-temp');
+        clonedCard.classList.add('static-card');
+
+        const interpretationText = document.createElement('div');
+        interpretationText.className = 'interpretation-text';
+        interpretationText.innerHTML = `<h3>${labels[i]}</h3><p>${sections[i].trim()}</p>`;
+
+        cardBlock.appendChild(clonedCard);
+        cardBlock.appendChild(interpretationText);
+        interpretation.appendChild(cardBlock);
+
+        setTimeout(() => {
+          cardBlock.classList.add('visible');
+          const sound = document.getElementById('chimeSound');
+          if (sound) sound.play();
+
+          if (i === orderedCards.length - 1 && anchor) {
+            setTimeout(() => {
+              anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              selectedCardsView.style.transition = 'opacity 1s ease';
+              selectedCardsView.style.opacity = '0';
+              setTimeout(() => {
+                selectedCardsView.classList.add('hidden-space');
+                // 🔮 Mostrar quiz luego de interpretar las 4 cartas
+                mostrarQuizConTransicion();
+              }, 1000);
+            }, 1000);
+          }
+        }, i * 1200);
+      });
+    } else {
+      interpretation.innerHTML = `
+        <div class="card-interpretation-block visible" style="flex-direction: column; text-align: left;">
+          <p style="color: #FFD700; font-style: italic;">No se pudo dividir la interpretación en secciones. A continuación, el mensaje completo:</p>
+          <div class="interpretation-text" style="margin-top: 1rem;">
+            ${raw.replace(/\n/g, '<br>')}
+          </div>
+        </div>
+      `;
+      console.warn('[Codex Debug] Formato inesperado en respuesta de IA:', raw);
+    }
+
+  } catch (err) {
+    loadingSymbol.style.display = 'none';
+    interpretation.innerText = 'El portal se cerró antes de tiempo... intenta de nuevo más tarde.';
+    console.error('[Codex Debug] Error de interpretación:', err);
+
+    const retryBtn = document.getElementById('retryButton');
+    if (retryBtn) {
+      retryBtn.style.display = 'inline-block';
+      retryBtn.onclick = () => {
+        retryBtn.style.display = 'none';
+        continueButton.click();
+      };
+    }
+  }
+});
+
 
   async function fetchWithRetry(payload, retries = 1, delay = 3000) {
     try {
