@@ -6,18 +6,13 @@
   <title>Codex Hermético - Carrusel</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
 
-  <style>
+ <style>
   body {
     margin: 0;
     padding: 2rem;
     background: linear-gradient(to bottom, #0D0D0D, #1A1A2E);
     color: #fff;
     font-family: 'Playfair Display', serif;
-  }
-
-  html, body {
-    height: 100%;
-    box-sizing: border-box;
   }
 
   h2 {
@@ -85,6 +80,53 @@
     opacity: 1;
   }
 
+  @media (max-width: 600px) {
+    .card { width: 65px; }
+    .card-title { font-size: 0.6rem; }
+    h2 {
+      font-size: 1rem;
+      margin: 1rem 0 0.0rem;
+    }
+    .button-container {
+      text-align: center;
+      margin-top: 2rem;
+    }
+  }
+
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body.mystic-glow {
+    animation: glowFade 1.5s ease-in-out;
+  }
+
+  @keyframes glowFade {
+    0% { box-shadow: inset 0 0 100px rgba(255, 215, 0, 0.2); background-color: #1f1a2e; }
+    50% { box-shadow: inset 0 0 200px rgba(255, 215, 0, 0.4); background-color: #292042; }
+    100% { box-shadow: inset 0 0 100px rgba(255, 215, 0, 0.2); background-color: #1a1a2e; }
+  }
+
+  @keyframes glowPulse {
+    0% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+    50% { box-shadow: 0 0 40px rgba(255, 215, 0, 1); }
+    100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+  }
+
+  @keyframes fadeInOut {
+    0% { opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  .glow-temp img {
+    animation: glowPulse 2s ease-in-out infinite;
+  }
+
   .btn-continue {
     display: none;
     background: radial-gradient(circle at center, #FFD700 0%, #b38600 100%);
@@ -107,16 +149,16 @@
     box-shadow: 0 0 25px rgba(255, 215, 0, 0.7);
   }
 
-  .btn-continue.active {
-    display: inline-block;
-  }
-
   .button-container {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 2rem;
     width: 100%;
+  }
+
+  .btn-continue.active {
+    display: inline-block;
   }
 
   #selectedCardsView {
@@ -154,7 +196,7 @@
   #interpretation {
     max-width: 700px;
     margin: 2rem auto;
-    padding: 1.5rem;
+    padding: 1.5rem 1.5rem;
     background: rgba(0, 0, 0, 0.4);
     font-style: italic;
     font-size: 1.1rem;
@@ -162,13 +204,14 @@
     white-space: pre-line;
     font-family: 'Playfair Display', serif;
     border-left: none !important;
-    display: none;
-    animation: fadeIn 0.8s ease forwards;
   }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
+  .hidden {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
   }
 
   .card-interpretation-block {
@@ -213,57 +256,11 @@
     line-height: 1.5;
   }
 
-  .alchemical-symbol {
-    font-size: 1.5rem;
-    text-align: center;
-    margin-bottom: 0.5rem;
-    color: #FFD700;
-    opacity: 0.8;
-  }
-
-  .glow-temp img {
-    animation: glowPulse 2s ease-in-out infinite;
-  }
-
-  @keyframes glowPulse {
-    0% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
-    50% { box-shadow: 0 0 40px rgba(255, 215, 0, 1); }
-    100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
-  }
-
-  .hidden {
-    display: none !important;
-    height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-  }
-
   #interpretacion-anchor {
     display: contents;
   }
-
-  @media (max-width: 600px) {
-    .card {
-      width: 65px;
-    }
-
-    .card-title {
-      font-size: 0.6rem;
-    }
-
-    h2 {
-      font-size: 1rem;
-      margin: 1rem 0 0.0rem;
-    }
-
-    .carousel-container {
-      justify-content: flex-start;
-      padding-left: 0.5rem;
-    }
-  }
-
 </style>
+
 
 
 </head>
@@ -480,6 +477,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
       const result = await response.json();
       loadingSymbol.style.display = 'none';
+      interpretation.classList.remove('hidden');
       interpretation.innerHTML = '';
 
       const raw = result.prediction || '';
