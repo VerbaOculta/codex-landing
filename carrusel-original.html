@@ -201,14 +201,7 @@ h2 {
   border-left: none !important;
 }
 
-#interpretation.hidden,
-#interpretation:empty {
-  display: none !important;
-  height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden;
-}
+  
 
 #interpretacion-anchor {
   display: contents;
@@ -424,6 +417,8 @@ h2 {
 
     const interpretation = document.createElement('div');
     interpretation.id = 'interpretation';
+    interpretation.classList.add('hidden');
+
     const anchor = document.getElementById('interpretacion-anchor');
     if (anchor) anchor.appendChild(interpretation);
 
@@ -492,7 +487,6 @@ h2 {
       });
 
       interpretation.innerText = 'Los símbolos han sido revelados... conectando con la Fuente...';
-      interpretation.classList.add('active');
       loadingSymbol.style.display = 'block';
 
       const ids = orderedCards.map(c => parseInt(c.getAttribute('data-id')));
@@ -511,6 +505,12 @@ h2 {
         const result = await response.json();
         loadingSymbol.style.display = 'none';
         interpretation.innerText = '';
+        interpretation.classList.remove('hidden');
+        interpretation.style.display = 'block';
+
+        selectedCardsView.style.transition = 'opacity 1.2s ease';
+        selectedCardsView.style.opacity = '0';
+        setTimeout(() => selectedCardsView.style.display = 'none', 1200);
 
         const raw = result.prediction || '';
         const sections = raw.split(/Umbral:|Voz:|Desafío:|Sendero:/).slice(1);
@@ -519,10 +519,10 @@ h2 {
         if (sections.length === 4) {
           orderedCards.forEach((card, i) => {
             const cardBlock = document.createElement('div');
-            cardBlock.className = 'card-interpretation-block vertical';
+            cardBlock.className = 'card-interpretation-block';
 
             const clonedCard = card.cloneNode(true);
-            clonedCard.classList.remove('glow-temp', 'selected');
+            clonedCard.classList.remove('glow-temp');
             clonedCard.classList.add('static-card');
 
             const interpretationText = document.createElement('div');
@@ -556,7 +556,7 @@ h2 {
               </div>
             </div>
           `;
-          console.warn('[Codex Debug] Formato inesperado en respuesta de IA:', raw);
+          console.warn('[Codex Debug] Formato inesperado en respuesta de Oraculo:', raw);
         }
 
       } catch (err) {
@@ -566,8 +566,6 @@ h2 {
     });
   });
 </script>
-
-
 
 </body>
 </html>
