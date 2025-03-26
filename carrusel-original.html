@@ -548,7 +548,7 @@ h2 {
 </div>
 
 <div class="quiz-container" id="quizSection">
-  <h2>¿Qué deseas manifestar en tu camino?</h2>
+  <h2>Elige el deseo que anhelas ver manifestado</h2>
   <div class="quiz-options">
     <div class="quiz-option" data-intent="Propósito y dirección espiritual">🌟 Propósito y dirección espiritual</div>
     <div class="quiz-option" data-intent="Relaciones conscientes y amorosas">💖 Relaciones conscientes y amorosas</div>
@@ -584,12 +584,14 @@ h2 {
     window.mostrarQuizConTransicion = function () {
       const interpretation = document.getElementById('interpretation');
       const transitionMsg = document.createElement('div');
+
       transitionMsg.innerHTML = `
         <p style="text-align: center; font-size: 1.2rem; font-style: italic; color: gold; margin: 3rem auto; max-width: 640px;">
-          Ahora que el Codex ha revelado sus fragmentos, háblanos de ti... <br>
-          ¿Qué deseas realmente manifestar?
+          Has descendido al corazón del Codex. <br>
+          Ahora, manifiesta tu deseo más profundo: ¿Qué anhelas transformar en tu vida?
         </p>
       `;
+
       interpretation.appendChild(transitionMsg);
       quizSection.style.display = 'block';
     };
