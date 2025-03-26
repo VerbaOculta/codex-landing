@@ -288,7 +288,22 @@ html, body {
 #interpretacion-anchor {
   margin-top: 2rem;
 }
-    
+
+    .symbol-loading {
+  width: 80px;
+  height: 80px;
+  margin: 2rem auto;
+  border: 4px solid rgba(255, 215, 0, 0.2);
+  border-top: 4px solid gold;
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
 
   </style>
 
@@ -411,15 +426,15 @@ html, body {
 
     const interpretation = document.createElement('div');
     interpretation.id = 'interpretation';
-    
-   const anchor = document.getElementById('interpretacion-anchor');
-   if (anchor) anchor.appendChild(interpretation);
 
+    const anchor = document.getElementById('interpretacion-anchor');
+    if (anchor) anchor.appendChild(interpretation);
 
     const loadingSymbol = document.createElement('div');
-    loadingSymbol.className = 'symbol';
+    loadingSymbol.className = 'symbol-loading';
     loadingSymbol.style.display = 'none';
-    document.body.insertBefore(loadingSymbol, interpretation);
+
+    if (anchor) anchor.insertBefore(loadingSymbol, interpretation);
 
     const messages = [
       "Tu energía ha convocado símbolos ancestrales",
@@ -500,7 +515,6 @@ html, body {
         loadingSymbol.style.display = 'none';
         interpretation.innerText = '';
 
-        // Desaparecer suavemente el grupo de cartas superior
         selectedCardsView.style.transition = 'opacity 1.2s ease';
         selectedCardsView.style.opacity = '0';
         setTimeout(() => selectedCardsView.style.display = 'none', 1200);
@@ -520,42 +534,25 @@ html, body {
 
             const interpretationText = document.createElement('div');
             interpretationText.className = 'interpretation-text';
-
-
-interpretationText.innerHTML = `
-  <h3>${labels[i]}</h3>
-  <p>${sections[i].trim()}</p>`;
-
+            interpretationText.innerHTML = `
+              <h3>${labels[i]}</h3>
+              <p>${sections[i].trim()}</p>`;
 
             cardBlock.appendChild(clonedCard);
             cardBlock.appendChild(interpretationText);
             interpretation.appendChild(cardBlock);
 
-   
+            setTimeout(() => {
+              cardBlock.classList.add('visible');
+              const sound = document.getElementById('chimeSound');
+              if (sound) sound.play();
 
-setTimeout(() => {
-  cardBlock.classList.add('visible');
-  const sound = document.getElementById('chimeSound');
-  if (sound) sound.play();
-
-  // Solo el último bloque hace scroll al inicio del contenedor de interpretación
-  if (i === orderedCards.length - 1) {
-    setTimeout(() => {
-   
-      if (anchor) {
-        anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-
-
-      
-    }, 1000);
-  }
-}, i * 1200);
-
-
-
-
-            
+              if (i === orderedCards.length - 1 && anchor) {
+                setTimeout(() => {
+                  anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 1000);
+              }
+            }, i * 1200);
           });
         } else {
           interpretation.innerHTML = `
@@ -576,6 +573,7 @@ setTimeout(() => {
     });
   });
 </script>
+
 
 
 </body>
