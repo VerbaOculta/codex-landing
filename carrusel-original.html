@@ -431,24 +431,25 @@ html, body {
     const continueButton = document.getElementById('continueButton');
     const magicMessage = document.getElementById('magicMessage');
     const selectedCards = new Set();
+    const anchor = document.getElementById('interpretacion-anchor');
 
+    // Crear y ubicar contenedor para mostrar las cartas seleccionadas
     const selectedCardsView = document.createElement('div');
     selectedCardsView.className = 'carousel-container';
     selectedCardsView.id = 'selectedCardsView';
     selectedCardsView.style.display = 'none';
     selectedCardsView.style.justifyContent = 'center';
-    document.body.appendChild(selectedCardsView);
+    if (anchor) anchor.appendChild(selectedCardsView);
 
+    // Crear y ubicar contenedor para interpretación
     const interpretation = document.createElement('div');
     interpretation.id = 'interpretation';
-
-    const anchor = document.getElementById('interpretacion-anchor');
     if (anchor) anchor.appendChild(interpretation);
 
+    // Crear y ubicar ícono animado de carga
     const loadingSymbol = document.createElement('div');
     loadingSymbol.className = 'symbol-loading';
     loadingSymbol.style.display = 'none';
-
     if (anchor) anchor.insertBefore(loadingSymbol, interpretation);
 
     const messages = [
@@ -459,9 +460,9 @@ html, body {
       "Los fragmentos han sido elegidos por tu alma"
     ];
 
+    // Manejo de selección de cartas
     cards.forEach(card => {
       const title = card.querySelector('.card-title');
-
       card.addEventListener('click', () => {
         const isSelected = card.classList.contains('selected');
         if (!isSelected && selectedCards.size >= 4) return;
@@ -482,9 +483,12 @@ html, body {
           const msg = messages[Math.floor(Math.random() * messages.length)];
           magicMessage.innerHTML = `
             <p>${msg}</p>
-            <button onclick="document.getElementById('continueButton').scrollIntoView({ behavior: 'smooth' });" style="margin-top: 1rem; padding: 8px 16px; font-size: 1rem; background-color: gold; color: black; border: none; border-radius: 5px; cursor: pointer;">Revelar</button>
-          `;
+            <button onclick="document.getElementById('continueButton').scrollIntoView({ behavior: 'smooth' });"
+              style="margin-top: 1rem; padding: 8px 16px; font-size: 1rem; background-color: gold; color: black; border: none; border-radius: 5px; cursor: pointer;">
+              Revelar
+            </button>`;
           magicMessage.style.display = 'block';
+
           const last = [...selectedCards][3];
           last.classList.add('glow-temp');
           setTimeout(() => {
@@ -495,6 +499,7 @@ html, body {
       });
     });
 
+    // Al presionar "Revelar los Fragmentos"
     continueButton.addEventListener('click', async () => {
       document.querySelectorAll('.carousel-container').forEach(c => c.style.display = 'none');
       document.querySelectorAll('h2').forEach(h => h.style.display = 'none');
@@ -530,6 +535,7 @@ html, body {
         loadingSymbol.style.display = 'none';
         interpretation.innerText = '';
 
+        // Oculta suavemente las cartas seleccionadas originales
         selectedCardsView.style.transition = 'opacity 1.2s ease';
         selectedCardsView.style.opacity = '0';
         setTimeout(() => selectedCardsView.style.display = 'none', 1200);
