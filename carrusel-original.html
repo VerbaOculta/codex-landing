@@ -410,51 +410,75 @@ html, body {
       });
     });
 
-    continueButton.addEventListener('click', async () => {
-      // Oculta carruseles y títulos
-      document.querySelectorAll('.carousel-container').forEach(c => c.style.display = 'none');
-      document.querySelectorAll('h2').forEach(h => h.style.display = 'none');
+continueButton.addEventListener('click', async () => {
+  document.querySelectorAll('.carousel-container').forEach(c => c.style.display = 'none');
+  document.querySelectorAll('h2').forEach(h => h.style.display = 'none');
+  continueButton.style.display = 'none';
 
-      // Oculta botón
-      continueButton.style.display = 'none';
+  selectedCardsView.innerHTML = '';
+  selectedCardsView.style.display = 'flex';
+  const orderedCards = [...selectedCards];
 
-      // Muestra las cartas seleccionadas
-      selectedCardsView.innerHTML = '';
-      selectedCardsView.style.display = 'flex';
-      const orderedCards = [...selectedCards];
-
-      orderedCards.forEach(card => {
-        const title = card.querySelector('.card-title');
-        if (title) title.style.display = 'none'; // oculta los títulos
-        selectedCardsView.appendChild(card);
-      });
-
-      // Muestra mensaje y símbolo de carga
-      interpretation.innerText = 'Los símbolos han sido revelados... conectando con la Fuente...';
-      loadingSymbol.style.display = 'block';
-
-      const ids = orderedCards.map(c => parseInt(c.getAttribute('data-id')));
-      const payload = {
-        selectedCards: ids,
-        positions: ["Umbral", "Voz", "Desafío", "Sendero"]
-      };
-
-      try {
-        const response = await fetch('https://codex-hermetico.vercel.app/api/predict', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        const result = await response.json();
-        loadingSymbol.style.display = 'none';
-        interpretation.innerText = result.prediction || 'Algo fue revelado, pero no logramos comprenderlo...';
-      } catch (err) {
-        loadingSymbol.style.display = 'none';
-        interpretation.innerText = 'El portal se cerró antes de tiempo... intenta de nuevo más tarde.';
-      }
-    });
+  orderedCards.forEach(card => {
+    const title = card.querySelector('.card-title');
+    if (title) title.style.display = 'none';
+    selectedCardsView.appendChild(card);
   });
+
+  interpretation.innerText = 'Los símbolos han sido revelados... conectando con la Fuente...';
+  loadingSymbol.style.display = 'block';
+
+  const ids = orderedCards.map(c => parseInt(c.getAttribute('data-id')));
+  const payload = {
+    selectedCards: ids,
+    positions: ["Umbral", "Voz", "Desafío", "Sendero"]
+  };
+
+  try {
+    const response = await fetch('https://codex-hermetico.vercel.app/api/predict', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+    loadingSymbol.style.display = 'none';
+    interpretation.innerText = ''; // Limpiamos el contenedor para mostrar secciones
+
+    const sections = result.prediction.split(/Umbral:|Voz:|Desafío:|Sendero:/).slice(1);
+    const labels = ['Umbral', 'Voz', 'Desafío', 'Sendero'];
+
+    orderedCards.forEach((card, i) => {
+      const cardBlock = document.createElement('div');
+      cardBlock.className = 'card-interpretation-block';
+
+      const clonedCard = card.cloneNode(true);
+      clonedCard.classList.remove('glow-temp');
+      clonedCard.classList.add('static-card');
+
+      const interpretationText = document.createElement('div');
+      interpretationText.className = 'interpretation-text';
+      interpretationText.innerHTML = `<h3>${labels[i]}</h3><p>${sections[i].trim()}</p>`;
+
+      cardBlock.appendChild(clonedCard);
+      cardBlock.appendChild(interpretationText);
+      interpretation.appendChild(cardBlock);
+
+      setTimeout(() => {
+        cardBlock.classList.add('visible');
+        cardBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, i * 1200); // animación secuencial
+    });
+
+  } catch (err) {
+    loadingSymbol.style.display = 'none';
+    interpretation.innerText = 'El portal se cerró antes de tiempo... intenta de nuevo más tarde.';
+  }
+});
+
+
+
+    
 </script>
 
 
