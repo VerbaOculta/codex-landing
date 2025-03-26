@@ -549,6 +549,9 @@ html, body {
       interpretation.classList.remove('hidden');
       interpretation.innerHTML = '<p>Los símbolos han sido revelados... conectando con la Fuente...</p>';
 
+
+      
+
       const ids = orderedCards.map(c => parseInt(c.getAttribute('data-id')));
       const payload = {
         selectedCards: ids,
@@ -563,6 +566,7 @@ html, body {
         });
 
         const result = await response.json();
+        console.log("🧪 Resultado crudo de IA:", result);
         loadingSymbol.style.display = 'none';
         interpretation.innerHTML = ''; // limpio antes de agregar bloques
 
