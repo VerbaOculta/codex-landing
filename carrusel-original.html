@@ -390,7 +390,7 @@ body.mystic-glow {
   La Obra está en marcha... el Codex comienza a revelar... 
 </div>
 
-  <script>
+<script>
   window.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.card');
     const continueButton = document.getElementById('continueButton');
@@ -398,20 +398,21 @@ body.mystic-glow {
     const selectedCards = new Set();
 
     const selectedCardsView = document.createElement('div');
-    selectedCardsView.className = 'carousel-container hidden';
+    selectedCardsView.className = 'carousel-container';
     selectedCardsView.id = 'selectedCardsView';
+    selectedCardsView.style.display = 'none';
     selectedCardsView.style.justifyContent = 'center';
     document.body.appendChild(selectedCardsView);
 
     const interpretation = document.createElement('div');
     interpretation.id = 'interpretation';
-    interpretation.classList.add('hidden');
 
     const anchor = document.getElementById('interpretacion-anchor');
     if (anchor) anchor.appendChild(interpretation);
 
     const loadingSymbol = document.createElement('div');
-    loadingSymbol.className = 'symbol-loading hidden';
+    loadingSymbol.className = 'symbol-loading';
+    loadingSymbol.style.display = 'none';
     if (anchor) anchor.insertBefore(loadingSymbol, interpretation);
 
     const messages = [
@@ -424,7 +425,6 @@ body.mystic-glow {
 
     cards.forEach(card => {
       const title = card.querySelector('.card-title');
-
       card.addEventListener('click', () => {
         const isSelected = card.classList.contains('selected');
         if (!isSelected && selectedCards.size >= 4) return;
@@ -459,23 +459,25 @@ body.mystic-glow {
     });
 
     continueButton.addEventListener('click', async () => {
-      document.querySelectorAll('.carousel-container').forEach(c => c.classList.add('hidden'));
+      document.querySelectorAll('.carousel-container').forEach(c => c.style.display = 'none');
       document.querySelectorAll('h2').forEach(h => h.style.display = 'none');
       continueButton.style.display = 'none';
 
       selectedCardsView.innerHTML = '';
+      selectedCardsView.style.display = 'flex';
+      selectedCardsView.style.opacity = '1';
       selectedCardsView.classList.remove('hidden');
-      const orderedCards = [...selectedCards];
 
+      const orderedCards = [...selectedCards];
       orderedCards.forEach(card => {
         const title = card.querySelector('.card-title');
         if (title) title.style.display = 'none';
         selectedCardsView.appendChild(card);
       });
 
-      interpretation.classList.remove('hidden');
       interpretation.innerText = 'Los símbolos han sido revelados... conectando con la Fuente...';
-      loadingSymbol.classList.remove('hidden');
+      interpretation.classList.remove('hidden');
+      loadingSymbol.style.display = 'block';
 
       const ids = orderedCards.map(c => parseInt(c.getAttribute('data-id')));
       const payload = {
@@ -491,12 +493,12 @@ body.mystic-glow {
         });
 
         const result = await response.json();
+        loadingSymbol.style.display = 'none';
+        interpretation.innerText = '';
+
         const raw = result.prediction || '';
         const sections = raw.split(/Umbral:|Voz:|Desafío:|Sendero:/).slice(1);
         const labels = ['Umbral', 'Voz', 'Desafío', 'Sendero'];
-
-        loadingSymbol.classList.add('hidden');
-        interpretation.innerHTML = '';
 
         if (sections.length === 4) {
           orderedCards.forEach((card, i) => {
@@ -509,9 +511,7 @@ body.mystic-glow {
 
             const interpretationText = document.createElement('div');
             interpretationText.className = 'interpretation-text';
-            interpretationText.innerHTML = `
-              <h3>${labels[i]}</h3>
-              <p>${sections[i].trim()}</p>`;
+            interpretationText.innerHTML = `<h3>${labels[i]}</h3><p>${sections[i].trim()}</p>`;
 
             cardBlock.appendChild(clonedCard);
             cardBlock.appendChild(interpretationText);
@@ -525,6 +525,14 @@ body.mystic-glow {
               if (i === orderedCards.length - 1 && anchor) {
                 setTimeout(() => {
                   anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                  // 🔄 Ocultar el grupo de 4 cartas seleccionadas después de mostrar la interpretación
+                  selectedCardsView.style.transition = 'opacity 1s ease';
+                  selectedCardsView.style.opacity = '0';
+
+                  setTimeout(() => {
+                    selectedCardsView.classList.add('hidden');
+                  }, 1000);
                 }, 1000);
               }
             }, i * 1200);
@@ -542,13 +550,12 @@ body.mystic-glow {
         }
 
       } catch (err) {
-        loadingSymbol.classList.add('hidden');
+        loadingSymbol.style.display = 'none';
         interpretation.innerText = 'El portal se cerró antes de tiempo... intenta de nuevo más tarde.';
       }
     });
   });
 </script>
-
 
 
 </body>
