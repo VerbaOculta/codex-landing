@@ -288,6 +288,87 @@ h2 {
   padding: 0 !important;
 }
 
+/* === BLOQUE DE INTERPRETACIÓN (VERSIÓN VERTICAL) === */
+
+.card-interpretation-block.vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  opacity: 0;
+  transform: translateY(-40px);
+  transition: all 0.8s ease;
+  position: relative;
+}
+
+.card-interpretation-block.visible.vertical::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border-radius: 16px;
+  background: radial-gradient(circle at center, rgba(255, 215, 0, 0.1), transparent);
+  z-index: 0;
+  animation: softGlow 4s ease-in-out infinite;
+}
+
+@keyframes softGlow {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.4; }
+}
+
+.card-interpretation-block.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card-interpretation-block .static-card {
+  width: 140px;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.interpretation-text {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 2px solid gold;
+  padding: 1rem;
+  border-radius: 8px;
+  color: #FFD700;
+  font-family: 'Playfair Display', serif;
+  z-index: 1;
+  max-width: 90%;
+  text-align: left;
+}
+
+.interpretation-text h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  font-family: 'Cinzel Decorative', cursive;
+  color: gold;
+  letter-spacing: 1px;
+  text-shadow: 0 0 6px rgba(255, 215, 0, 0.6);
+  text-align: center;
+}
+
+.interpretation-text p {
+  margin: 0;
+  line-height: 1.6;
+  font-size: 1.15rem;
+  text-align: justify;
+}
+
+.interpretation-text p:first-letter {
+  font-size: 1.8rem;
+  color: gold;
+  float: left;
+  margin-right: 0.2rem;
+  line-height: 1;
+}
+   
    
 </style>
 
@@ -417,7 +498,6 @@ h2 {
 
     const interpretation = document.createElement('div');
     interpretation.id = 'interpretation';
-    interpretation.classList.add('hidden');
 
     const anchor = document.getElementById('interpretacion-anchor');
     if (anchor) anchor.appendChild(interpretation);
@@ -486,7 +566,8 @@ h2 {
         selectedCardsView.appendChild(card);
       });
 
-      interpretation.innerText = 'Los símbolos han sido revelados... conectando con la Fuente...';
+      interpretation.innerHTML = '';
+      interpretation.style.display = 'block';
       loadingSymbol.style.display = 'block';
 
       const ids = orderedCards.map(c => parseInt(c.getAttribute('data-id')));
@@ -505,8 +586,6 @@ h2 {
         const result = await response.json();
         loadingSymbol.style.display = 'none';
         interpretation.innerText = '';
-        interpretation.classList.remove('hidden');
-        interpretation.style.display = 'block';
 
         selectedCardsView.style.transition = 'opacity 1.2s ease';
         selectedCardsView.style.opacity = '0';
@@ -519,27 +598,27 @@ h2 {
         if (sections.length === 4) {
           orderedCards.forEach((card, i) => {
             const cardBlock = document.createElement('div');
-            cardBlock.className = 'card-interpretation-block';
+            cardBlock.className = 'vertical-interpretation-block';
 
             const clonedCard = card.cloneNode(true);
             clonedCard.classList.remove('glow-temp');
             clonedCard.classList.add('static-card');
 
-            const interpretationText = document.createElement('div');
-            interpretationText.className = 'interpretation-text';
-            interpretationText.innerHTML = `
+            const textBlock = document.createElement('div');
+            textBlock.className = 'vertical-interpretation-text';
+            textBlock.innerHTML = `
               <h3>${labels[i]}</h3>
-              <p>${sections[i].trim()}</p>`;
+              <p>${sections[i].trim()}</p>
+            `;
 
             cardBlock.appendChild(clonedCard);
-            cardBlock.appendChild(interpretationText);
+            cardBlock.appendChild(textBlock);
             interpretation.appendChild(cardBlock);
 
             setTimeout(() => {
               cardBlock.classList.add('visible');
               const sound = document.getElementById('chimeSound');
               if (sound) sound.play();
-
               if (i === orderedCards.length - 1 && anchor) {
                 setTimeout(() => {
                   anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -549,14 +628,14 @@ h2 {
           });
         } else {
           interpretation.innerHTML = `
-            <div class="card-interpretation-block visible" style="flex-direction: column; text-align: left;">
+            <div class="vertical-interpretation-block visible" style="flex-direction: column; text-align: left;">
               <p style="color: #FFD700; font-style: italic;">No se pudo dividir la interpretación en secciones. A continuación, el mensaje completo:</p>
-              <div class="interpretation-text" style="margin-top: 1rem;">
+              <div class="vertical-interpretation-text" style="margin-top: 1rem;">
                 ${raw.replace(/\n/g, '<br>')}
               </div>
             </div>
           `;
-          console.warn('[Codex Debug] Formato inesperado en respuesta de Oraculo:', raw);
+          console.warn('[Codex Debug] Formato inesperado en respuesta de IA:', raw);
         }
 
       } catch (err) {
@@ -566,6 +645,7 @@ h2 {
     });
   });
 </script>
+
 
 </body>
 </html>
