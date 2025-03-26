@@ -223,18 +223,26 @@ html, body {
 }
 
 #interpretation {
-  max-width: 600px;
+  max-width: 700px;
   margin: 2rem auto;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.5);
-  border-left: 4px solid gold;
+  padding: 1.5rem 1.5rem;
+  background: rgba(0, 0, 0, 0.4);
   font-style: italic;
   font-size: 1.1rem;
   color: #FFD700;
   white-space: pre-line;
   font-family: 'Playfair Display', serif;
+  border-left: none !important; /* 🔥 Línea amarilla eliminada */
 }
 
+.alchemical-symbol {
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: #FFD700;
+  opacity: 0.8;
+}
+    
 
 .card-interpretation-block {
   display: flex;
@@ -486,6 +494,11 @@ html, body {
         loadingSymbol.style.display = 'none';
         interpretation.innerText = '';
 
+        // Desaparecer suavemente el grupo de cartas superior
+        selectedCardsView.style.transition = 'opacity 1.2s ease';
+        selectedCardsView.style.opacity = '0';
+        setTimeout(() => selectedCardsView.style.display = 'none', 1200);
+
         const raw = result.prediction || '';
         const sections = raw.split(/Umbral:|Voz:|Desafío:|Sendero:/).slice(1);
         const labels = ['Umbral', 'Voz', 'Desafío', 'Sendero'];
@@ -501,7 +514,12 @@ html, body {
 
             const interpretationText = document.createElement('div');
             interpretationText.className = 'interpretation-text';
-            interpretationText.innerHTML = `<h3>${labels[i]}</h3><p>${sections[i].trim()}</p>`;
+
+const elementSymbols = ['🜃', '🜁', '🜂', '🜄'];
+interpretationText.innerHTML = `
+  <div class="alchemical-symbol">${elementSymbols[i]}</div>
+  <h3>${labels[i]}</h3>
+  <p>${sections[i].trim()}</p>`;
 
             cardBlock.appendChild(clonedCard);
             cardBlock.appendChild(interpretationText);
@@ -533,9 +551,5 @@ html, body {
 </script>
 
 
-
-
-
-  
 </body>
 </html>
