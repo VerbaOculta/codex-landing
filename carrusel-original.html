@@ -285,7 +285,9 @@ html, body {
   margin: 0;
   line-height: 1.5;
 }
-
+#interpretacion-anchor {
+  margin-top: 2rem;
+}
     
 
   </style>
@@ -367,6 +369,7 @@ html, body {
     </div>
   </div>
 
+  <section id="interpretacion-anchor"></section>
 
 <div class="button-container">
   <button class="btn-continue" id="continueButton">✨ Revelar los Fragmentos</button>
@@ -408,7 +411,10 @@ html, body {
 
     const interpretation = document.createElement('div');
     interpretation.id = 'interpretation';
-    document.body.appendChild(interpretation);
+    
+   const anchor = document.getElementById('interpretacion-anchor');
+   if (anchor) anchor.appendChild(interpretation);
+
 
     const loadingSymbol = document.createElement('div');
     loadingSymbol.className = 'symbol';
@@ -535,7 +541,13 @@ setTimeout(() => {
   // Solo el último bloque hace scroll al inicio del contenedor de interpretación
   if (i === orderedCards.length - 1) {
     setTimeout(() => {
-      interpretation.scrollIntoView({ behavior: 'smooth', block: 'start' });
+   
+      if (anchor) {
+        anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+
+      
     }, 1000);
   }
 }, i * 1200);
