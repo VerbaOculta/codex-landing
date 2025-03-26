@@ -290,6 +290,14 @@ html, body {
   display: contents;
 }
 
+#interpretation:empty {
+  display: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+    
 
     .symbol-loading {
   width: 80px;
@@ -515,7 +523,9 @@ html, body {
         selectedCardsView.appendChild(card);
       });
 
-      interpretation.innerText = 'Los símbolos han sido revelados... conectando con la Fuente...';
+      interpretation.innerHTML = ''; // así permanece vacío hasta insertar contenido real
+
+      //interpretation.innerText = 'Los símbolos han sido revelados... conectando con la Fuente...';
       loadingSymbol.style.display = 'block';
 
       const ids = orderedCards.map(c => parseInt(c.getAttribute('data-id')));
