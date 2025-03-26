@@ -278,6 +278,14 @@ body.mystic-glow {
   animation: spin 1.2s linear infinite;
 }
 
+.hidden-space {
+  height: 0 !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  pointer-events: none;
+}
    
 </style>
 
@@ -531,7 +539,7 @@ body.mystic-glow {
                   selectedCardsView.style.opacity = '0';
 
                   setTimeout(() => {
-                    selectedCardsView.classList.add('hidden');
+                    selectedCardsView.classList.add('hidden-space');
                   }, 1000);
                 }, 1000);
               }
