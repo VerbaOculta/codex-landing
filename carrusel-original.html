@@ -6,7 +6,8 @@
   <title>Codex Hermético - Carrusel</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
 <style>
-/* === ESTILOS BASE === */
+
+  /* === ESTILOS BASE === */
 html, body {
   height: 100%;
   margin: 0;
@@ -46,126 +47,66 @@ h2 {
   }
 }
 
-/* === CONTENEDOR DE INTERPRETACIÓN === */
+/* === BLOQUES DE INTERPRETACIÓN === */
 .card-interpretation-block {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1rem;
   margin: 3rem auto;
-  padding: 2rem;
-  background: rgba(0, 0, 0, 0.6);
-  border: 2px solid gold;
-  border-radius: 16px;
-  max-width: 600px;
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
-  position: relative;
+  opacity: 0;
+  transform: translateY(-40px);
+  transition: all 0.8s ease;
+  max-width: 640px;
 }
 
-.card-interpretation-block::before {
-  content: '';
-  position: absolute;
-  top: -10px;
-  left: -10px;
-  right: -10px;
-  bottom: -10px;
-  border-radius: 16px;
-  background: radial-gradient(circle at center, rgba(255, 215, 0, 0.1), transparent);
-  z-index: 0;
-  animation: softGlow 4s ease-in-out infinite;
+.card-interpretation-block.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-@keyframes softGlow {
-  0%, 100% { opacity: 0.2; }
-  50% { opacity: 0.4; }
+.card-interpretation-block .static-card {
+  width: 120px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 8px gold);
 }
 
-/* === CARTA FIJA === */
-.static-card {
-  width: 160px;
-  margin-bottom: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 0 25px rgba(255, 215, 0, 0.7);
-  z-index: 1;
-}
-
-/* === TÍTULO DE LA INTERPRETACIÓN === */
-.interpretation-text h3 {
-  font-family: 'Cinzel Decorative', cursive;
-  font-size: 1.8rem;
-  color: #FFD700;
-  margin-bottom: 1rem;
-  text-align: center;
-  letter-spacing: 1px;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-  z-index: 1;
-}
-
-/* === TEXTO DE LA INTERPRETACIÓN === */
 .interpretation-text {
-  flex: 1;
   background: rgba(255, 255, 255, 0.05);
-  border-left: 2px solid gold;
-  padding: 1.5rem;
-  border-radius: 8px;
+  border-left: 3px solid gold;
+  padding: 1.2rem;
+  border-radius: 12px;
   color: #FFD700;
   font-family: 'Playfair Display', serif;
-  max-width: 90%;
-  z-index: 1;
+  font-size: 1.05rem;
+}
+
+.interpretation-text h3 {
+  margin: 0 0 1rem;
+  font-size: 1.4rem;
+  font-family: 'Cinzel Decorative', cursive;
+  color: gold;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .interpretation-text p {
-  font-size: 1.1rem;
-  font-style: italic;
-  color: #FFD700;
+  margin: 0;
+  line-height: 1.6;
   text-align: justify;
-  line-height: 1.7;
-  position: relative;
-  padding-left: 1rem;
 }
 
-.interpretation-text p::first-letter {
-  font-size: 2.5rem;
-  float: left;
-  line-height: 1;
-  padding-right: 0.3rem;
-  color: gold;
-  font-family: 'Cinzel Decorative', cursive;
+/* === GLOW === */
+@keyframes glowPulse {
+  0% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+  50% { box-shadow: 0 0 40px rgba(255, 215, 0, 1); }
+  100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
 }
 
-/* === RESPONSIVE === */
-@media (max-width: 600px) {
-  .card-interpretation-block {
-    padding: 1.5rem 1rem;
-    margin: 2rem 1rem;
-  }
-
-  .static-card {
-    width: 120px;
-  }
-
-  .interpretation-text h3 {
-    font-size: 1.5rem;
-  }
-
-  .interpretation-text p {
-    font-size: 1rem;
-    padding-left: 0.5rem;
-  }
+.glow-temp img {
+  animation: glowPulse 2s ease-in-out infinite;
 }
 
-/* === TEXTURA DE FONDO (opcional: requiere imagen) === */
-/* body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url('ruta-a-textura-alquimica.png') repeat;
-  opacity: 0.04;
-  z-index: 0;
-  pointer-events: none;
-} */
 </style>
 
 
