@@ -454,6 +454,98 @@ h2 {
     background: #ffd700;
     box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
   }
+
+  .revelation-section {
+    display: none;
+    text-align: center;
+    margin-top: 3rem;
+    padding: 2rem;
+    background: linear-gradient(to bottom, #000000 0%, #111111 100%);
+    border-top: 1px solid gold;
+    animation: fadeIn 1.5s ease forwards;
+    opacity: 0;
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes pulse-glow {
+    0% { box-shadow: 0 0 10px rgba(255,215,0,0.3); }
+    50% { box-shadow: 0 0 30px rgba(255,215,0,0.8); }
+    100% { box-shadow: 0 0 10px rgba(255,215,0,0.3); }
+  }
+
+  .revelation-section.visible {
+    display: block;
+  }
+
+  .revelation-section h3 {
+    color: gold;
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+    animation: fadeIn 1.2s ease-out both;
+  }
+
+  .revelation-cards {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .revelation-cards .card {
+    background: #111;
+    border: 1px solid gold;
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 280px;
+    transition: transform 0.5s ease;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+    cursor: pointer;
+    animation: pulse-glow 2s infinite;
+  }
+
+  .revelation-cards .card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.3);
+  }
+
+  .revelation-cards .card img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .revelation-cards .card-title {
+    padding: 0.8rem;
+    font-size: 1rem;
+    font-weight: bold;
+    background: black;
+    color: gold;
+    font-family: 'Playfair Display', serif;
+    text-align: center;
+  }
+
+  .form-section {
+    display: none;
+    margin-top: 2rem;
+    text-align: center;
+    color: white;
+  }
+
+  .form-section.visible {
+    display: block;
+  }
 </style>
 
 
@@ -580,7 +672,29 @@ h2 {
   </div>
   <button class="quiz-continue" id="quizContinue" disabled>Continuar ✦</button>
 </div>
-  
+
+
+<div class="revelation-section" id="revelation">
+  <h3>Dos fragmentos te han elegido... pero solo uno guarda la llave para tu transformación final.</h3>
+  <div class="revelation-cards">
+    <div class="card" data-id="4">
+      <img src="https://media.atomicatpages.net/u/VKdhbutUBLg5pZCmDWr4fJf466f1/Pictures/ttounc7344506.png?w=640&q=75" alt="La Vestidura del Alma 4">
+      <div class="card-title">La Vestidura del Alma</div>
+    </div>
+    <div class="card" data-id="5">
+      <img src="https://media.atomicatpages.net/u/VKdhbutUBLg5pZCmDWr4fJf466f1/Pictures/XSRvml3191624.png?w=640&q=75" alt="La Obra Concluida 5">
+      <div class="card-title">La Obra Concluida</div>
+    </div>
+  </div>
+</div>
+
+<div class="form-section" id="formSection">
+  <h3>Tu fragmento ha sido elegido. Recibe la interpretación completa en tu correo:</h3>
+  <div>
+    <!-- Aquí va el embed de ActiveCampaign -->
+
+  </div>
+</div>  
 
 
 <script>
@@ -604,6 +718,46 @@ h2 {
     continueBtn.addEventListener('click', () => {
       console.log('Intención seleccionada:', selectedIntent);
       // Aquí se puede integrar el paso siguiente con la intención capturada.
+    });
+
+    window.mostrarQuizConTransicion = function () {
+      quizSection.style.display = 'block';
+      quizSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // --- Revelacion ---
+
+    const quizOptions = document.querySelectorAll('.quiz-option');
+    const continueBtn = document.getElementById('quizContinue');
+    const quizSection = document.getElementById('quizSection');
+    const revelation = document.getElementById('revelation');
+    const formSection = document.getElementById('formSection');
+    const cards = document.querySelectorAll('.revelation-cards .card');
+    let selectedIntent = null;
+
+    quizOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        quizOptions.forEach(o => o.classList.remove('selected'));
+        option.classList.add('selected');
+        selectedIntent = option.getAttribute('data-intent');
+        continueBtn.disabled = false;
+        continueBtn.innerText = 'Abrir el portal ✦';
+      });
+    });
+
+    continueBtn.addEventListener('click', () => {
+      console.log('Intención seleccionada:', selectedIntent);
+      revelation.classList.add('visible');
+      revelation.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        cards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        formSection.classList.add('visible');
+        formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
     });
 
     window.mostrarQuizConTransicion = function () {
