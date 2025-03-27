@@ -371,7 +371,7 @@ h2 {
 <style>
   .quiz-container {
     max-width: 700px;
-    margin: 2rem auto 1rem;
+    margin: 1rem auto 1rem;
     padding: 1.2rem;
     background: rgba(0, 0, 0, 0.5);
     border: 1px solid gold;
@@ -397,11 +397,11 @@ h2 {
 
   .quiz-container h2 {
     font-family: 'Cinzel Decorative', cursive;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     text-align: center;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
     color: gold;
-    line-height: 1.4;
+    line-height: 1.5;
     text-shadow: 0 0 4px rgba(255, 215, 0, 0.25);
   }
 
@@ -563,7 +563,9 @@ h2 {
 ">
   La Obra está en marcha... el Codex comienza a revelar...
 </div>
-  <div class="quiz-container" id="quizSection">
+
+<div class="quiz-container" id="quizSection">
+  <h2>Has descendido al corazón del <strong>Codex</strong>.<br><span style="display:inline-block; margin-top: 0.5rem;">Ahora, manifiesta tu deseo más profundo:<br><em>¿Qué anhelas transformar en tu vida?</em></span></h2>
   <div class="quiz-options">
     <div class="quiz-option" data-intent="Propósito y dirección espiritual" role="button" tabindex="0">🌟 Propósito y dirección espiritual</div>
     <div class="quiz-option" data-intent="Relaciones conscientes y amorosas" role="button" tabindex="0">💖 Relaciones conscientes y amorosas</div>
@@ -573,6 +575,7 @@ h2 {
   </div>
   <button class="quiz-continue" id="quizContinue" disabled>Continuar</button>
 </div>
+  
 
 
 <script>
@@ -599,15 +602,6 @@ h2 {
     });
 
     window.mostrarQuizConTransicion = function () {
-      const interpretation = document.getElementById('interpretation');
-      const transitionMsg = document.createElement('div');
-      transitionMsg.innerHTML = `
-        <p style="text-align: center; font-size: 1.3rem; font-style: italic; color: gold; margin: 0.5rem auto 1rem; max-width: 640px; font-family: 'Cinzel Decorative', cursive; text-shadow: 0 0 4px rgba(255, 215, 0, 0.25);">
-          Has descendido al corazón del <strong>Codex</strong>.<br>
-          <span style="display:inline-block; margin-top: 0.5rem;">Ahora, manifiesta tu deseo más profundo:<br> <em>¿Qué anhelas transformar en tu vida?</em></span>
-        </p>
-      `;
-      interpretation.appendChild(transitionMsg);
       quizSection.style.display = 'block';
       quizSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
