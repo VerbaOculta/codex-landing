@@ -397,18 +397,19 @@ h2 {
 
   .quiz-container h2 {
     font-family: 'Cinzel Decorative', cursive;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     text-align: center;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     color: gold;
-    text-shadow: 0 0 6px rgba(255, 215, 0, 0.5);
+    line-height: 1.4;
+    text-shadow: 0 0 4px rgba(255, 215, 0, 0.25);
   }
 
   .quiz-options {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    margin: 2rem 0;
+    margin: 1.2rem 0;
   }
 
   .quiz-option {
@@ -418,6 +419,8 @@ h2 {
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
+    font-size: 1rem;
+    outline: none;
   }
 
   .quiz-option:hover,
@@ -425,11 +428,16 @@ h2 {
     border-color: gold;
     box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
     background: rgba(255, 255, 255, 0.08);
+    transform: scale(1.02);
+  }
+
+  .quiz-option:focus {
+    outline: 2px solid gold;
   }
 
   .quiz-continue {
     display: block;
-    margin: 2rem auto 0;
+    margin: 1.5rem auto 0;
     background: gold;
     color: black;
     font-family: 'Cinzel Decorative', cursive;
@@ -571,10 +579,10 @@ h2 {
   window.addEventListener('DOMContentLoaded', () => {
     // --- Quiz Section ---
 
-     const quizOptions = document.querySelectorAll('.quiz-option');
-     const continueBtn = document.getElementById('quizContinue');
-     const quizSection = document.getElementById('quizSection');
-     let selectedIntent = null;
+    const quizOptions = document.querySelectorAll('.quiz-option');
+    const continueBtn = document.getElementById('quizContinue');
+    const quizSection = document.getElementById('quizSection');
+    let selectedIntent = null;
 
     quizOptions.forEach(option => {
       option.addEventListener('click', () => {
@@ -594,7 +602,7 @@ h2 {
       const interpretation = document.getElementById('interpretation');
       const transitionMsg = document.createElement('div');
       transitionMsg.innerHTML = `
-        <p style="text-align: center; font-size: 1.3rem; font-style: italic; color: gold; margin: 0.5rem auto 0.5rem; max-width: 640px; font-family: 'Cinzel Decorative', cursive; text-shadow: 0 0 8px rgba(255, 215, 0, 0.3);">
+        <p style="text-align: center; font-size: 1.3rem; font-style: italic; color: gold; margin: 0.5rem auto 1rem; max-width: 640px; font-family: 'Cinzel Decorative', cursive; text-shadow: 0 0 4px rgba(255, 215, 0, 0.25);">
           Has descendido al corazón del <strong>Codex</strong>.<br>
           <span style="display:inline-block; margin-top: 0.5rem;">Ahora, manifiesta tu deseo más profundo:<br> <em>¿Qué anhelas transformar en tu vida?</em></span>
         </p>
