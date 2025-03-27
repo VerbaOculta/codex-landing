@@ -368,7 +368,7 @@ h2 {
   
 </style>
 
- <style>
+<style>
   .quiz-container {
     max-width: 700px;
     margin: 3rem auto;
@@ -379,6 +379,20 @@ h2 {
     color: #FFD700;
     font-family: 'Playfair Display', serif;
     box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+    display: none;
+    animation: fadeInUp 1s ease forwards;
+    opacity: 0;
+  }
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .quiz-container h2 {
@@ -431,12 +445,7 @@ h2 {
     background: #ffd700;
     box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
   }
-
- #quizSection {
-  display: none;
-  } 
-</style> 
-
+</style>
 
 </head>
 
@@ -561,7 +570,7 @@ h2 {
 <script>
   window.addEventListener('DOMContentLoaded', () => {
     // --- Quiz Section ---
-    const quizOptions = document.querySelectorAll('.quiz-option');
+  const quizOptions = document.querySelectorAll('.quiz-option');
     const continueBtn = document.getElementById('quizContinue');
     const quizSection = document.getElementById('quizSection');
     let selectedIntent = null;
@@ -577,24 +586,21 @@ h2 {
 
     continueBtn.addEventListener('click', () => {
       console.log('Intención seleccionada:', selectedIntent);
-      // Aquí podrías guardar la intención en localStorage o continuar el flujo
+      // Aquí se puede integrar el paso siguiente con la intención capturada.
     });
 
     window.mostrarQuizConTransicion = function () {
       const interpretation = document.getElementById('interpretation');
       const transitionMsg = document.createElement('div');
-
       transitionMsg.innerHTML = `
-        <p style="text-align: center; font-size: 1.2rem; font-style: italic; color: gold; margin: 3rem auto; max-width: 640px;">
-          Has descendido al corazón del Codex. <br>
-          Ahora, manifiesta tu deseo más profundo: ¿Qué anhelas transformar en tu vida?
+        <p style="text-align: center; font-size: 1.3rem; font-style: italic; color: gold; margin: 1.5rem auto 1rem; max-width: 640px; font-family: 'Cinzel Decorative', cursive; text-shadow: 0 0 8px rgba(255, 215, 0, 0.3);">
+          Has descendido al corazón del <strong>Codex</strong>.<br>
+          <span style="display:inline-block; margin-top: 0.5rem;">Ahora, manifiesta tu deseo más profundo:<br> <em>¿Qué anhelas transformar en tu vida?</em></span>
         </p>
       `;
-
       interpretation.appendChild(transitionMsg);
       quizSection.style.display = 'block';
-    };
-
+    }
     // --- Selección de Cartas ---
     const cards = document.querySelectorAll('.card');
     const continueButton = document.getElementById('continueButton');
