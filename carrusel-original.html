@@ -747,10 +747,10 @@ h2 {
       revelation.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
-    cards.forEach(card1 => {
-      card.addEventListener('click', () => {
-        cards.forEach(c => c.classList.remove('selected'));
-        card.classList.add('selected');
+    cards1.forEach(card1 => {
+      card1.addEventListener('click', () => {
+        cards1.forEach(c => c.classList.remove('selected'));
+        card1.classList.add('selected');
         formSection.classList.add('visible');
         formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
