@@ -729,7 +729,7 @@ h2 {
 
     const revelation = document.getElementById('revelation');
     const formSection = document.getElementById('formSection');
-    const cards = document.querySelectorAll('.revelation-cards .card');
+    const cards1 = document.querySelectorAll('.revelation-cards .card');
 
     quizOptions.forEach(option => {
       option.addEventListener('click', () => {
@@ -747,7 +747,7 @@ h2 {
       revelation.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
-    cards.forEach(card => {
+    cards.forEach(card1 => {
       card.addEventListener('click', () => {
         cards.forEach(c => c.classList.remove('selected'));
         card.classList.add('selected');
