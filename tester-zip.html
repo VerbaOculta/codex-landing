@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tester - Generar ZIP de Fragmentos HD</title>
+</head>
+<body style="font-family: Arial; max-width: 600px; margin: 40px auto;">
+    <h2>Tester - Generar ZIP de Fragmentos HD</h2>
+
+    <label for="token">Token JWT:</label><br>
+    <textarea id="token" rows="6" cols="80" placeholder="Pega aquí el token JWT"></textarea><br><br>
+
+    <button onclick="generarZIP()">Generar ZIP</button>
+
+    <h3>Resultado:</h3>
+    <pre id="resultado" style="background-color: #f0f0f0; padding: 10px;"></pre>
+
+    <script>
+        async function generarZIP() {
+            const token = document.getElementById('token').value.trim();
+
+            if (!token) {
+                alert('Por favor, ingresa un token JWT válido.');
+                return;
+            }
+
+            const respuestaElemento = document.getElementById('resultado');
+            respuestaElemento.textContent = 'Procesando...';
+
+            try {
+                const respuesta = await fetch('/api/generate-fragments-zip', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token })
+                });
+
+                const data = await respuesta.json();
+                respuestaElemento.textContent = JSON.stringify(data, null, 2);
+
+                if (data.s3Url) {
+                    const link = document.createElement('a');
+                    link.href = data.s3Url;
+                    link.textContent = '🔗 Descargar ZIP';
+                    link.target = '_blank';
+                    respuestaElemento.appendChild(document.createElement('br'));
+                    respuestaElemento.appendChild(link);
+                }
+
+            } catch (error) {
+                respuestaElemento.textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
